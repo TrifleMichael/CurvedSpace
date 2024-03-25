@@ -1,12 +1,12 @@
 public class Circle {
     double radius;
-    Point center;
+    Vector center;
 
     public boolean collidesWithCircle(Circle other) {
         return this.center.getDistance(other.center) < this.radius + other.radius;
     }
 
-    public void move(Point shiftVector) {
+    public void move(Vector shiftVector) {
         this.center.add(shiftVector);
     }
 }

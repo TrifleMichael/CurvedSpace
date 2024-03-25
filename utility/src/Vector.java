@@ -1,18 +1,18 @@
-public class Point {
+public class Vector {
     double x;
     double y;
 
-    public Point(double x, double y) {
+    public Vector(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public void add(Point other) {
+    public void add(Vector other) {
         this.x += other.x;
         this.y += other.y;
     }
 
-    public void subtract(Point other) {
+    public void subtract(Vector other) {
         this.x -= other.x;
         this.y -= other.y;
     }
@@ -24,7 +24,7 @@ public class Point {
         this.y = new_y;
     }
 
-    public void rotateAroundPoint(Point other, double radians) {
+    public void rotateAroundPoint(Vector other, double radians) {
         this.subtract(other);
         this.rotate(radians);
         this.add(other);
@@ -35,15 +35,19 @@ public class Point {
         this.y *= constant;
     }
 
-    public Point getDifference(Point other) {
-        return new Point(this.x - other.x, this.y-other.y);
+    public Vector getDifference(Vector other) {
+        return new Vector(this.x - other.x, this.y-other.y);
     }
 
     public double getLength() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
-    public double getDistance(Point other) {
+    public double getDistance(Vector other) {
         return this.getDifference(other).getLength();
+    }
+
+    public double getAngle(Vector other) {
+        return Math.atan2(other.y - y, other.x - x);
     }
 }
