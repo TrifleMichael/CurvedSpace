@@ -1,13 +1,14 @@
 import static org.lwjgl.opengl.GL11.*;
 
-public class CircleSpriteHandler {
-    public Vector center;
+public class CircleSpriteHandler extends AbstractSpriteHandler {
     double radius;
 
     float r, g, b;
 
-    public CircleSpriteHandler(Vector center, double radius) {
-        this.center = center;
+    CircleObject circleObject;
+
+    public CircleSpriteHandler(CircleObject circleObject, double radius) {
+        this.circleObject = circleObject;
         this.radius = radius;
         r = 0;
         g = 1;
@@ -15,6 +16,8 @@ public class CircleSpriteHandler {
     }
 
     public void drawCircle() {
+        Vector center = circleObject.newtonPoint.position;
+
         glColor3f(r, g, b); // TODO Hardcoded color
         glBegin(GL_TRIANGLE_FAN);
         glVertex2d(center.x, center.y);

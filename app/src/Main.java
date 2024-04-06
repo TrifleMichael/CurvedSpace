@@ -20,7 +20,8 @@ public class Main {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
         init();
-        loop();
+        SimulationHandler simulationHandler = new SimulationHandler(window);
+        simulationHandler.loop();
 
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(window);
@@ -84,75 +85,7 @@ public class Main {
         glfwShowWindow(window);
     }
 
-    private void loop() {
 
-        NewtonPoint p1 = new NewtonPoint(new Vector(300, 400));
-        NewtonPoint p2 = new NewtonPoint(new Vector(500, 400));
-
-        p1.speed.y += 0.3;
-        p2.speed.y -= 0.3;
-
-        CircleSpriteHandler circleSpriteHandler1 = new CircleSpriteHandler(p1.position, 30);
-        circleSpriteHandler1.r = 1f;
-        CircleSpriteHandler circleSpriteHandler2 = new CircleSpriteHandler(p2.position, 30);
-
-
-        // This line is critical for LWJGL's interoperation with GLFW's
-        // OpenGL context, or any context that is managed externally.
-        // LWJGL detects the context that is current in the current thread,
-        // creates the GLCapabilities instance and makes the OpenGL
-        // bindings available for use.
-        GL.createCapabilities();
-
-        // Set the clear color
-        glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
-
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
-        while (!glfwWindowShouldClose(window)) {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
-            // Set up the projection matrix
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            glOrtho(0, 800, 0, 800, 1, -1); // Assuming your window size is 800x800
-
-            // Set up the modelview matrix
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-
-            // https://stackoverflow.com/questions/20394727/gl-triangle-strip-vs-gl-triangle-fan
-
-            // Simulate physics
-            p1.move();
-            p2.move();
-            p1.applyGravity(new NewtonPoint[] {p2});
-            p2.applyGravity(new NewtonPoint[] {p1});
-
-            // Draw the result
-            circleSpriteHandler1.drawCircle();
-            circleSpriteHandler2.drawCircle();
-
-            glfwSwapBuffers(window); // swap the color buffers
-
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
-            glfwPollEvents();
-        }
-    }
-
-    public void drawCircle(double center_x, double center_y, double radius) {
-        glColor3f(1.0f, 1.0f, 1.0f); // TODO Hardcoded color
-        glBegin(GL_TRIANGLE_FAN);
-        glVertex2d(center_x, center_y);
-        for (int i = 0; i <= 360; i++) { // TODO Hardcoded polygon count
-            double theta = Math.toRadians(i);
-            double x = center_x + radius * Math.cos(theta);
-            double y = center_y + radius * Math.sin(theta);
-            glVertex2d(x, y);
-        }
-        glEnd();
-    }
 
     public static void main(String[] args) {
         new Main().run();

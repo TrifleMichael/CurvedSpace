@@ -11,7 +11,9 @@ public class NewtonPoint {
 
     public void applyGravity(NewtonPoint[] newtonPoints) {
         for(var point : newtonPoints) {
-            this.speed.add(getGravitationalContribution(point));
+            if (point != this) {
+                this.speed.add(getGravitationalContribution(point));
+            }
         }
     }
 
