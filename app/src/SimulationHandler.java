@@ -18,6 +18,8 @@ public class SimulationHandler {
 
     ArrayList<CircleObject> circleObjects = new ArrayList<>();
 
+    SpacePlane spacePlane;
+
     NewtonPoint[] getNewtonPoints() {
         return circleObjects.stream().map(co -> co.newtonPoint).toArray(NewtonPoint[]::new);
     }
@@ -25,21 +27,32 @@ public class SimulationHandler {
     CircleSpriteHandler[] getCircleSprites() {
         return circleObjects.stream().map(co -> co.circleSpriteHandler).toArray(CircleSpriteHandler[]::new);
     }
-    public void loop() {
+
+    public void gameSetup() {
         circleObjects.add(new CircleObject(300, 400, 30));
         circleObjects.add(new CircleObject(500, 400, 30));
         circleObjects.get(0).setSpeed(new Vector(0, 0.3));
         circleObjects.get(1).setSpeed(new Vector(0, -0.3));
-//        NewtonPoint p1 = new NewtonPoint(new Vector(300, 400));
-//        NewtonPoint p2 = new NewtonPoint(new Vector(500, 400));
-//
-//        p1.speed.y += 0.3;
-//        p2.speed.y -= 0.3;
-//
-//        CircleSpriteHandler circleSpriteHandler1 = new CircleSpriteHandler(p1.position, 30);
-//        circleSpriteHandler1.r = 1f;
-//        CircleSpriteHandler circleSpriteHandler2 = new CircleSpriteHandler(p2.position, 30);
 
+        spacePlane = new SpacePlane(new NewtonPoint(new Vector(100, 100)));
+    }
+
+    public void drawFrame() {
+        for (var sprite : getCircleSprites()) {
+            sprite.drawCircle();
+        }
+    }
+
+    public void simulatePhysics() {
+        var newtonPoints = getNewtonPoints();
+        for (var point : newtonPoints) {
+            point.move();
+            point.applyGravity(newtonPoints);
+        }
+    }
+
+    public void loop() {
+        gameSetup();
 
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
@@ -67,15 +80,8 @@ public class SimulationHandler {
 
             // https://stackoverflow.com/questions/20394727/gl-triangle-strip-vs-gl-triangle-fan
 
-            // Simulate physics
-            var newtonPoints = getNewtonPoints();
-            for (var point : newtonPoints) {
-                point.move();
-                point.applyGravity(newtonPoints);
-            }
-            for (var sprite : getCircleSprites()) {
-                sprite.drawCircle();
-            }
+            simulatePhysics();
+            drawFrame();
 
             glfwSwapBuffers(window); // swap the color buffers
 

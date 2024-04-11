@@ -1,7 +1,7 @@
 public class SpacePlane {
-    Vector center;
+    NewtonPoint center;
 
-    public SpacePlane(Vector center) {
+    public SpacePlane(NewtonPoint center) {
         this.center = center;
     }
 }
