@@ -23,7 +23,7 @@ public class NewtonPoint {
 
     Vector getGravitationalContribution(NewtonPoint newtonPoint) {
         double dist = position.getDistance(newtonPoint.position);
-        double gravityForceScalar = this.mass * newtonPoint.mass * Settings.G / (dist * dist);
+        double gravityForceScalar = newtonPoint.mass * Settings.G / (dist * dist);
         double angle = position.getAngle(newtonPoint.position);
         return new Vector(
                 Math.cos(angle) * gravityForceScalar,

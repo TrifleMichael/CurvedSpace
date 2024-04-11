@@ -1,3 +1,4 @@
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
 
 import java.util.ArrayList;
@@ -10,11 +11,11 @@ public class SimulationHandler {
 
     long window;
 
+    Vector cursorPosition = new Vector(0, 0);
+
     public SimulationHandler(long window) {
         this.window = window;
     }
-
-    SpriteHandler spriteHandler = new SpriteHandler();
 
     ArrayList<CircleObject> circleObjects = new ArrayList<>();
 
@@ -28,7 +29,29 @@ public class SimulationHandler {
         return circleObjects.stream().map(co -> co.circleSpriteHandler).toArray(CircleSpriteHandler[]::new);
     }
 
+    boolean leftButtonDown;
+
     public void gameSetup() {
+        // TODO This isnt game setup
+        glfwSetCursorPosCallback(window, (window, xpos, ypos) -> {
+            cursorPosition = CoordinateTransposer.visualToPhysical(new Vector(xpos, ypos));
+        });
+
+        glfwSetMouseButtonCallback(window, new GLFWMouseButtonCallback() {
+            @Override
+            public void invoke(long window, int button, int action, int mods) {
+                if (button == GLFW_MOUSE_BUTTON_LEFT) {
+                    if (action == GLFW_PRESS) {
+                        leftButtonDown = true;
+                        System.out.println("Left mouse button pressed");
+                    } else if (action == GLFW_RELEASE) {
+                        leftButtonDown = false;
+                        System.out.println("Left mouse button released");
+                    }
+                }
+            }
+        });
+
         circleObjects.add(new CircleObject(300, 400, 30));
         circleObjects.add(new CircleObject(500, 400, 30));
         circleObjects.get(0).setSpeed(new Vector(0, 0.3));
@@ -41,6 +64,7 @@ public class SimulationHandler {
         for (var sprite : getCircleSprites()) {
             sprite.drawCircle();
         }
+        spacePlane.draw();
     }
 
     public void simulatePhysics() {
@@ -49,6 +73,15 @@ public class SimulationHandler {
             point.move();
             point.applyGravity(newtonPoints);
         }
+        spacePlane.center.applyGravity(newtonPoints);
+
+        Vector spacePlaneSpeedFromCursor = cursorPosition.getDifference(spacePlane.center.position);
+        spacePlaneSpeedFromCursor.normalize();
+        spacePlaneSpeedFromCursor.multiplyByConstant(0.2);
+        if (leftButtonDown) {
+            spacePlane.center.speed.add(spacePlaneSpeedFromCursor);
+        }
+        spacePlane.center.move();
     }
 
     public void loop() {

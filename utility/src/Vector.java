@@ -35,6 +35,10 @@ public class Vector {
         this.y *= constant;
     }
 
+    public Vector pointToPointMultiply(Vector other) {
+        return new Vector(this.x * other.x, this.y * other.y);
+    }
+
     public Vector getDifference(Vector other) {
         return new Vector(this.x - other.x, this.y-other.y);
     }
@@ -49,5 +53,10 @@ public class Vector {
 
     public double getAngle(Vector other) {
         return Math.atan2(other.y - y, other.x - x);
+    }
+    public void normalize() {
+        double length = getLength();
+        this.x /= length;
+        this.y /= length;
     }
 }
