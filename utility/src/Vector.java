@@ -7,6 +7,11 @@ public class Vector {
         this.y = y;
     }
 
+    public Vector(Vector vector) {
+        this.x = vector.x;
+        this.y = vector.y;
+    }
+
     public void add(Vector other) {
         this.x += other.x;
         this.y += other.y;

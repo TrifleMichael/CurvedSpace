@@ -19,6 +19,8 @@ public class SimulationHandler {
 
     ArrayList<CircleObject> circleObjects = new ArrayList<>();
 
+    ArrayList<ParametricPoint> parametricPoints = new ArrayList<>();
+
     SpacePlane spacePlane;
 
     NewtonPoint[] getNewtonPoints() {
@@ -31,8 +33,7 @@ public class SimulationHandler {
 
     boolean leftButtonDown;
 
-    public void gameSetup() {
-        // TODO This isnt game setup
+    public void callbackSetup() {
         glfwSetCursorPosCallback(window, (window, xpos, ypos) -> {
             cursorPosition = CoordinateTransposer.visualToPhysical(new Vector(xpos, ypos));
         });
@@ -51,30 +52,42 @@ public class SimulationHandler {
                 }
             }
         });
+    }
 
+    public void gameSetup() {
         circleObjects.add(new CircleObject(300, 400, 30));
         circleObjects.add(new CircleObject(500, 400, 30));
         circleObjects.get(0).setSpeed(new Vector(0, 0.3));
         circleObjects.get(1).setSpeed(new Vector(0, -0.3));
 
         spacePlane = new SpacePlane(new NewtonPoint(new Vector(100, 100)));
+
+        parametricPoints.add(new ParametricPoint(new Vector(400,400), 0.01, 300, 100, 60));
     }
 
     public void drawFrame() {
         for (var sprite : getCircleSprites()) {
             sprite.drawCircle();
         }
+        for (var point : parametricPoints) {
+            point.draw();
+        }
         spacePlane.draw();
     }
 
     public void simulatePhysics() {
+        // Other points
         var newtonPoints = getNewtonPoints();
         for (var point : newtonPoints) {
             point.move();
             point.applyGravity(newtonPoints);
         }
-        spacePlane.center.applyGravity(newtonPoints);
+        for (var point : parametricPoints) {
+            point.nextStep();
+        }
 
+        // Spaceplane
+        spacePlane.center.applyGravity(newtonPoints);
         Vector spacePlaneSpeedFromCursor = cursorPosition.getDifference(spacePlane.center.position);
         spacePlaneSpeedFromCursor.normalize();
         spacePlaneSpeedFromCursor.multiplyByConstant(0.2);
@@ -85,6 +98,7 @@ public class SimulationHandler {
     }
 
     public void loop() {
+        callbackSetup();
         gameSetup();
 
         // This line is critical for LWJGL's interoperation with GLFW's
