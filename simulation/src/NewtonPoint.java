@@ -1,7 +1,7 @@
 
 
 public class NewtonPoint {
-    Vector position;
+    public Vector position;
     Vector speed = new Vector(0, 0);
     public double mass = 1;
 

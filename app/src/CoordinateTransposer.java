@@ -1,9 +1,19 @@
 public class CoordinateTransposer {
-    public static Vector physicalToVisual(Vector vector) {
-       return new Vector(vector.x, vector.y);
+
+    public Vector shipPosition;
+
+    public Vector physicalToVisual(Vector vector) {
+        Vector vec = new Vector(vector);
+        vec.subtract(shipPosition);
+        vec.add(new Vector(Settings.windowX / 2, Settings.windowY / 2));
+       return vec;
     }
 
-    public static Vector visualToPhysical(Vector vector) {
-        return new Vector(vector.x, Settings.windowY-vector.y);
+    public Vector visualToPhysical(Vector vector) {
+        Vector vec = new Vector(vector);
+        vec.y = Settings.windowY - vec.y;
+        vec.subtract(new Vector(Settings.windowX / 2, Settings.windowY / 2));
+        vec.add(shipPosition);
+        return vec;
     }
 }

@@ -1,5 +1,5 @@
 public class Settings {
-    public static double G = 50;
+    public static double G = 200;
 
     public static int windowX = 800;
 

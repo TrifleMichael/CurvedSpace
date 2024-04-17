@@ -7,16 +7,19 @@ public class CircleSpriteHandler extends AbstractSpriteHandler {
 
     CircleObject circleObject;
 
-    public CircleSpriteHandler(CircleObject circleObject, double radius) {
+    CoordinateTransposer coordinateTransposer;
+
+    public CircleSpriteHandler(CircleObject circleObject, double radius, CoordinateTransposer coordinateTransposer) {
         this.circleObject = circleObject;
         this.radius = radius;
         r = 0;
         g = 1;
         b = 0;
+        this.coordinateTransposer = coordinateTransposer;
     }
 
     public void drawCircle() {
-        Vector center = CoordinateTransposer.physicalToVisual(circleObject.newtonPoint.position);
+        Vector center = coordinateTransposer.physicalToVisual(circleObject.newtonPoint.position);
 
         glColor3f(r, g, b); // TODO Hardcoded color
         glBegin(GL_TRIANGLE_FAN);

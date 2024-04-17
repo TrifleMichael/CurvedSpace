@@ -1,7 +1,7 @@
 import static org.lwjgl.opengl.GL11.*;
 
 public class SpacePlane {
-    NewtonPoint center;
+    public NewtonPoint center;
 
 
     float r = 1;
@@ -10,8 +10,11 @@ public class SpacePlane {
 
     float b = 1;
 
-    public SpacePlane(NewtonPoint center) {
+    CoordinateTransposer coordinateTransposer;
+
+    public SpacePlane(NewtonPoint center, CoordinateTransposer coordinateTransposer) {
         this.center = center;
+        this.coordinateTransposer = coordinateTransposer;
     }
 
     public void move() {
@@ -19,7 +22,9 @@ public class SpacePlane {
     }
 
     public void draw() {
-        Vector visualCenter = CoordinateTransposer.physicalToVisual(center.position);
+//        System.out.println("SPEED " + center.speed.x + " " + center.speed.y);
+
+        Vector visualCenter = coordinateTransposer.physicalToVisual(center.position);
 
         glColor3f(r, g, b); // TODO Hardcoded color
         glBegin(GL_TRIANGLE_FAN);

@@ -23,6 +23,8 @@ public class SimulationHandler {
 
     SpacePlane spacePlane;
 
+    CoordinateTransposer coordinateTransposer = new CoordinateTransposer();
+
     NewtonPoint[] getNewtonPoints() {
         return circleObjects.stream().map(co -> co.newtonPoint).toArray(NewtonPoint[]::new);
     }
@@ -35,7 +37,8 @@ public class SimulationHandler {
 
     public void callbackSetup() {
         glfwSetCursorPosCallback(window, (window, xpos, ypos) -> {
-            cursorPosition = CoordinateTransposer.visualToPhysical(new Vector(xpos, ypos));
+            cursorPosition = coordinateTransposer.visualToPhysical(new Vector(xpos, ypos));
+            System.out.println(cursorPosition.x + " " + cursorPosition.y);
         });
 
         glfwSetMouseButtonCallback(window, new GLFWMouseButtonCallback() {
@@ -55,14 +58,14 @@ public class SimulationHandler {
     }
 
     public void gameSetup() {
-        circleObjects.add(new CircleObject(300, 400, 30));
-        circleObjects.add(new CircleObject(500, 400, 30));
-        circleObjects.get(0).setSpeed(new Vector(0, 0.3));
-        circleObjects.get(1).setSpeed(new Vector(0, -0.3));
+        circleObjects.add(new CircleObject(300, 400, 30, coordinateTransposer));
+        circleObjects.add(new CircleObject(500, 400, 30, coordinateTransposer));
+        circleObjects.get(0).setSpeed(new Vector(0, 0.5));
+        circleObjects.get(1).setSpeed(new Vector(0, -0.5));
 
-        spacePlane = new SpacePlane(new NewtonPoint(new Vector(100, 100)));
+        spacePlane = new SpacePlane(new NewtonPoint(new Vector(100, 100)), coordinateTransposer);
 
-        parametricPoints.add(new ParametricPoint(new Vector(400,400), 0.01, 300, 100, 60));
+        parametricPoints.add(new ParametricPoint(new Vector(400,400), 0.01, 300, 100, 60, coordinateTransposer));
     }
 
     public void drawFrame() {
@@ -76,6 +79,8 @@ public class SimulationHandler {
     }
 
     public void simulatePhysics() {
+        coordinateTransposer.shipPosition = spacePlane.center.position;
+
         // Other points
         var newtonPoints = getNewtonPoints();
         for (var point : newtonPoints) {

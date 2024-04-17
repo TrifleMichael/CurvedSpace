@@ -18,15 +18,18 @@ public class ParametricPoint {
 
     Vector elipseCenter;
 
-    public ParametricPoint(Vector elipseCenter, double dt, double a, double b, double angle) {
+    CoordinateTransposer coordinateTransposer;
+
+    public ParametricPoint(Vector elipseCenter, double dt, double a, double b, double angle, CoordinateTransposer coordinateTransposer) {
         this.elipseCenter = elipseCenter;
         this.a = a;
         this.b = b;
         this.dt = dt;
         this.angle = angle;
+        this.coordinateTransposer = coordinateTransposer;
     }
 
-    public void nextStep() {
+    public void nextStep() { // TODO Constant steps give unrealistic acceleration for elliptic orbits
         Vector centerOffsetVector = new Vector(a * Math.cos(t), b * Math.sin(t));
         centerOffsetVector.rotate(angle / 180 * Math.PI);
         this.center = new Vector(elipseCenter);
@@ -36,7 +39,7 @@ public class ParametricPoint {
     }
 
     public void draw() {
-        Vector center = CoordinateTransposer.physicalToVisual(this.center);
+        Vector center = coordinateTransposer.physicalToVisual(this.center);
 
         glColor3f(0, 0, 0); // TODO Hardcoded color
         glBegin(GL_TRIANGLE_FAN);
