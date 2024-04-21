@@ -1,3 +1,8 @@
+package simulation;
+
+import app.CoordinateTransposer;
+import utility.Vector;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class ParametricPoint {

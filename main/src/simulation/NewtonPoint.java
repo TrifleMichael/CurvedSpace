@@ -1,18 +1,25 @@
+package simulation;
 
+import utility.Settings;
+import utility.Vector;
 
 public class NewtonPoint {
     public Vector position;
-    Vector speed = new Vector(0, 0);
+    public Vector speed = new Vector(0, 0);
     public double mass = 1;
+
+    public boolean movable = true;
 
     public NewtonPoint(Vector position) {
         this.position = position;
     }
 
     public void applyGravity(NewtonPoint[] newtonPoints) {
-        for(var point : newtonPoints) {
-            if (point != this) {
-                this.speed.add(getGravitationalContribution(point));
+        if (movable) {
+            for (var point : newtonPoints) {
+                if (point != this) {
+                    this.speed.add(getGravitationalContribution(point));
+                }
             }
         }
     }

@@ -1,13 +1,20 @@
+package app;
+
+import simulation.CircleObject;
+import utility.*;
+
 import static org.lwjgl.opengl.GL11.*;
 
-public class CircleSpriteHandler extends AbstractSpriteHandler {
-    double radius;
+public class CircleSpriteHandler {
+    public double radius;
 
-    float r, g, b;
+    public double r, g, b;
 
     CircleObject circleObject;
 
     CoordinateTransposer coordinateTransposer;
+
+    public int drawPrecision;
 
     public CircleSpriteHandler(CircleObject circleObject, double radius, CoordinateTransposer coordinateTransposer) {
         this.circleObject = circleObject;
@@ -16,16 +23,17 @@ public class CircleSpriteHandler extends AbstractSpriteHandler {
         g = 1;
         b = 0;
         this.coordinateTransposer = coordinateTransposer;
+        drawPrecision = 360;
     }
 
     public void drawCircle() {
         Vector center = coordinateTransposer.physicalToVisual(circleObject.newtonPoint.position);
 
-        glColor3f(r, g, b); // TODO Hardcoded color
+        glColor3f((float)r, (float)g, (float)b); // TODO Hardcoded color
         glBegin(GL_TRIANGLE_FAN);
         glVertex2d(center.x, center.y);
-        for (int i = 0; i <= 360; i++) { // TODO Hardcoded polygon count
-            double theta = Math.toRadians(i);
+        for (int i = 0; i <= drawPrecision; i++) { // TODO Hardcoded polygon count
+            double theta = Math.toRadians((double)i*360/drawPrecision);
             double x = center.x + radius * Math.cos(theta);
             double y = center.y + radius * Math.sin(theta);
             glVertex2d(x, y);

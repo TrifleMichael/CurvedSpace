@@ -1,8 +1,16 @@
+package app;
+
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
+import simulation.*;
+import utility.Settings;
+import utility.Vector;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.awt.image.BufferedImage;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -10,6 +18,8 @@ import static org.lwjgl.opengl.GL11.*;
 public class SimulationHandler {
 
     long window;
+
+
 
     Vector cursorPosition = new Vector(0, 0);
 
@@ -33,7 +43,10 @@ public class SimulationHandler {
         return circleObjects.stream().map(co -> co.circleSpriteHandler).toArray(CircleSpriteHandler[]::new);
     }
 
+    ArrayList<BackgroundStar> backgroundStars;
+
     boolean leftButtonDown;
+
 
     public void callbackSetup() {
         glfwSetCursorPosCallback(window, (window, xpos, ypos) -> {
@@ -47,10 +60,10 @@ public class SimulationHandler {
                 if (button == GLFW_MOUSE_BUTTON_LEFT) {
                     if (action == GLFW_PRESS) {
                         leftButtonDown = true;
-                        System.out.println("Left mouse button pressed");
+//                        System.out.println("Left mouse button pressed");
                     } else if (action == GLFW_RELEASE) {
                         leftButtonDown = false;
-                        System.out.println("Left mouse button released");
+//                        System.out.println("Left mouse button released");
                     }
                 }
             }
@@ -69,6 +82,8 @@ public class SimulationHandler {
     }
 
     public void singleStarGameSetup() {
+        backgroundStars = BackgroundStar.spawnStars(3000, new Vector(-2000, -2000), new Vector(2000, 2000), coordinateTransposer);
+
         circleObjects.add(new CircleObject(0, 0, 30, coordinateTransposer));
         circleObjects.get(0).newtonPoint.mass = 10;
         circleObjects.get(0).circleSpriteHandler.r = 1;
@@ -85,6 +100,9 @@ public class SimulationHandler {
     }
 
     public void drawFrame() {
+        for (var bs : backgroundStars) {
+            bs.circleObject.circleSpriteHandler.drawCircle();
+        }
         for (var sprite : getCircleSprites()) {
             sprite.drawCircle();
         }
@@ -132,7 +150,7 @@ public class SimulationHandler {
         GL.createCapabilities();
 
         // Set the clear color
-        glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.1f, 0.0f);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.

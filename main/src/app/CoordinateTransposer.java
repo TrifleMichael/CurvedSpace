@@ -1,3 +1,8 @@
+package app;
+
+import utility.Settings;
+import utility.Vector;
+
 public class CoordinateTransposer {
 
     public Vector shipPosition;
