@@ -38,7 +38,7 @@ public class SimulationHandler {
     public void callbackSetup() {
         glfwSetCursorPosCallback(window, (window, xpos, ypos) -> {
             cursorPosition = coordinateTransposer.visualToPhysical(new Vector(xpos, ypos));
-            System.out.println(cursorPosition.x + " " + cursorPosition.y);
+//            System.out.println(cursorPosition.x + " " + cursorPosition.y);
         });
 
         glfwSetMouseButtonCallback(window, new GLFWMouseButtonCallback() {
@@ -68,6 +68,22 @@ public class SimulationHandler {
         parametricPoints.add(new ParametricPoint(new Vector(400,400), 0.01, 300, 100, 60, coordinateTransposer));
     }
 
+    public void singleStarGameSetup() {
+        circleObjects.add(new CircleObject(0, 0, 30, coordinateTransposer));
+        circleObjects.get(0).newtonPoint.mass = 10;
+        circleObjects.get(0).circleSpriteHandler.r = 1;
+        circleObjects.get(0).circleSpriteHandler.g = 1;
+        circleObjects.get(0).circleSpriteHandler.b = 0;
+
+
+        circleObjects.add(new CircleObject(700, 0, 15, coordinateTransposer));
+        circleObjects.get(1).newtonPoint.mass = 0.5;
+        circleObjects.get(1).setSpeed(new Vector(0, 1.4));
+
+        spacePlane = new SpacePlane(new NewtonPoint(new Vector(250, 0)), coordinateTransposer);
+        spacePlane.center.speed.y = 2;
+    }
+
     public void drawFrame() {
         for (var sprite : getCircleSprites()) {
             sprite.drawCircle();
@@ -95,7 +111,7 @@ public class SimulationHandler {
         spacePlane.center.applyGravity(newtonPoints);
         Vector spacePlaneSpeedFromCursor = cursorPosition.getDifference(spacePlane.center.position);
         spacePlaneSpeedFromCursor.normalize();
-        spacePlaneSpeedFromCursor.multiplyByConstant(0.2);
+        spacePlaneSpeedFromCursor.multiplyByConstant(0.01);
         if (leftButtonDown) {
             spacePlane.center.speed.add(spacePlaneSpeedFromCursor);
         }
@@ -104,7 +120,9 @@ public class SimulationHandler {
 
     public void loop() {
         callbackSetup();
-        gameSetup();
+//        gameSetup();
+        singleStarGameSetup();
+
 
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
@@ -124,7 +142,7 @@ public class SimulationHandler {
             // Set up the projection matrix
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0, 800, 0, 800, 1, -1); // Assuming your window size is 800x800
+            glOrtho(0, Settings.windowX, 0, Settings.windowY, 1, -1); // Assuming your window size is 800x800
 
             // Set up the modelview matrix
             glMatrixMode(GL_MODELVIEW);
