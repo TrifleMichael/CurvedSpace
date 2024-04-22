@@ -92,11 +92,11 @@ public class SimulationHandler {
 
 
         circleObjects.add(new CircleObject(700, 0, 15, coordinateTransposer));
-        circleObjects.get(1).newtonPoint.mass = 0.5;
-        circleObjects.get(1).setSpeed(new Vector(0, 1.4));
+        circleObjects.get(1).newtonPoint.mass = 1.5;
+        circleObjects.get(1).setSpeed(new Vector(0, 0.83));
 
         spacePlane = new SpacePlane(new NewtonPoint(new Vector(250, 0)), coordinateTransposer);
-        spacePlane.center.speed.y = 2;
+        spacePlane.center.speed.y = 1;
     }
 
     public void drawFrame() {
@@ -129,7 +129,7 @@ public class SimulationHandler {
         spacePlane.center.applyGravity(newtonPoints);
         Vector spacePlaneSpeedFromCursor = cursorPosition.getDifference(spacePlane.center.position);
         spacePlaneSpeedFromCursor.normalize();
-        spacePlaneSpeedFromCursor.multiplyByConstant(0.01);
+        spacePlaneSpeedFromCursor.multiplyByConstant(0.03);
         if (leftButtonDown) {
             spacePlane.center.speed.add(spacePlaneSpeedFromCursor);
         }
