@@ -20,34 +20,29 @@ public class SimulationHandler {
     long window;
 
 
-
     Vector cursorPosition = new Vector(0, 0);
 
     public SimulationHandler(long window) {
         this.window = window;
     }
 
-    ArrayList<CircleObject> circleObjects = new ArrayList<>();
-
-    ArrayList<ParametricPoint> parametricPoints = new ArrayList<>();
-
-    SpacePlane spacePlane;
-
     CoordinateTransposer coordinateTransposer = new CoordinateTransposer();
 
+
+    GameState gameState = new GameState(coordinateTransposer);
+
+
     NewtonPoint[] getNewtonPoints() {
-        return circleObjects.stream().map(co -> co.newtonPoint).toArray(NewtonPoint[]::new);
+        return gameState.circleObjects.stream().map(co -> co.newtonPoint).toArray(NewtonPoint[]::new);
     }
 
 
     CircleSpriteHandler[] getCircleSprites() {
-        return circleObjects.stream().map(co -> co.circleSpriteHandler).toArray(CircleSpriteHandler[]::new);
+        return gameState.circleObjects.stream().map(co -> co.circleSpriteHandler).toArray(CircleSpriteHandler[]::new);
     }
 
-    ArrayList<BackgroundStar> backgroundStars;
 
     boolean leftButtonDown;
-
 
     public void callbackSetup() {
         glfwSetCursorPosCallback(window, (window, xpos, ypos) -> {
@@ -67,54 +62,35 @@ public class SimulationHandler {
 //                        System.out.println("Left mouse button released");
                     }
                 }
+                if (button == GLFW_KEY_P) {
+                    if (action == GLFW_PRESS) {
+
+                    }
+                }
             }
         });
     }
 
-    public void gameSetup() {
-        circleObjects.add(new CircleObject(300, 400, 30, coordinateTransposer));
-        circleObjects.add(new CircleObject(500, 400, 30, coordinateTransposer));
-        circleObjects.get(0).newtonPoint.speed = new Vector(0, 0.5);
-        circleObjects.get(1).newtonPoint.speed = new Vector(0, -0.5);
-
-        spacePlane = new SpacePlane(new Vector(100, 100), coordinateTransposer);
-
-        parametricPoints.add(new ParametricPoint(new Vector(400,400), 0.01, 300, 100, 60, coordinateTransposer));
-    }
 
     public void singleStarGameSetup() {
-        backgroundStars = BackgroundStar.spawnStars(3000, new Vector(-2000, -2000), new Vector(2000, 2000), coordinateTransposer);
-
-        circleObjects.add(new CircleObject(0, 0, 30, coordinateTransposer));
-        circleObjects.get(0).newtonPoint.mass = 10;
-        circleObjects.get(0).circleSpriteHandler.r = 1;
-        circleObjects.get(0).circleSpriteHandler.g = 1;
-        circleObjects.get(0).circleSpriteHandler.b = 0;
-
-
-        circleObjects.add(new CircleObject(700, 0, 15, coordinateTransposer));
-        circleObjects.get(1).newtonPoint.mass = 1.5;
-        circleObjects.get(1).newtonPoint.speed = new Vector(0, 0.83);
-
-        spacePlane = new SpacePlane(new Vector(250, 0), coordinateTransposer);
-        spacePlane.speed.y = 1;
+        gameState.gameState1();
     }
 
     public void drawFrame() {
-        for (var bs : backgroundStars) {
+        for (var bs : gameState.backgroundStars) {
             bs.circleObject.circleSpriteHandler.drawCircle();
         }
         for (var sprite : getCircleSprites()) {
             sprite.drawCircle();
         }
-        for (var point : parametricPoints) {
+        for (var point : gameState.parametricPoints) {
             point.draw();
         }
-        spacePlane.draw();
+        gameState.spacePlane.draw();
     }
 
     public void simulatePhysics() {
-        coordinateTransposer.shipPosition = spacePlane;
+        coordinateTransposer.shipPosition = gameState.spacePlane;
 
         // Other points
         var newtonPoints = getNewtonPoints();
@@ -122,19 +98,19 @@ public class SimulationHandler {
             point.move();
             point.applyGravity(newtonPoints);
         }
-        for (var point : parametricPoints) {
+        for (var point : gameState.parametricPoints) {
             point.nextStep();
         }
 
         // Spaceplane
-        spacePlane.applyGravity(newtonPoints);
-        Vector spacePlaneSpeedFromCursor = cursorPosition.getDifference(spacePlane);
+        gameState.spacePlane.applyGravity(newtonPoints);
+        Vector spacePlaneSpeedFromCursor = cursorPosition.getDifference(gameState.spacePlane);
         spacePlaneSpeedFromCursor.normalize();
         spacePlaneSpeedFromCursor.multiplyByConstant(0.03);
         if (leftButtonDown) {
-            spacePlane.speed.add(spacePlaneSpeedFromCursor);
+            gameState.spacePlane.speed.add(spacePlaneSpeedFromCursor);
         }
-        spacePlane.move();
+        gameState.spacePlane.move();
     }
 
     public void loop() {
