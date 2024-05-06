@@ -3,6 +3,8 @@ package simulation;
 import app.CoordinateTransposer;
 import utility.Vector;
 
+import java.util.ArrayList;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class SpacePlane extends NewtonPoint {
@@ -13,6 +15,25 @@ public class SpacePlane extends NewtonPoint {
     float g = 1;
 
     float b = 1;
+
+    public ArrayList<Vector> speedStack = new ArrayList<>();
+
+    public int speedStackLimit = 60000;
+
+    @Override
+    public void moveBackwards() {
+        int lastIndex = speedStack.size() - 1;
+        this.speed = speedStack.get(lastIndex);
+        speedStack.remove(lastIndex);
+        this.x -= this.speed.x;
+        this.y -= this.speed.y;
+    }
+
+    @Override
+    public void move() {
+        super.move();
+        speedStack.add(new Vector(speed));
+    }
 
     CoordinateTransposer coordinateTransposer;
 
