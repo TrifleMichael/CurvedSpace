@@ -5,8 +5,7 @@ import utility.Vector;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class SpacePlane {
-    public NewtonPoint center;
+public class SpacePlane extends NewtonPoint {
 
 
     float r = 1;
@@ -17,20 +16,14 @@ public class SpacePlane {
 
     CoordinateTransposer coordinateTransposer;
 
-    public SpacePlane(NewtonPoint center, CoordinateTransposer coordinateTransposer) {
-        this.center = center;
+    public SpacePlane(Vector center, CoordinateTransposer coordinateTransposer) {
+        super(center);
         this.coordinateTransposer = coordinateTransposer;
     }
 
-    public void move() {
-        center.move();
-    }
-
     public void draw() {
-//        System.out.println("SPEED " + center.speed.x + " " + center.speed.y);
-
         // Plane dot
-        Vector visualCenter = coordinateTransposer.physicalToVisual(center.position);
+        Vector visualCenter = coordinateTransposer.physicalToVisual(this);
 
         glColor3f(r, g, b); // TODO Hardcoded color
         glBegin(GL_TRIANGLE_FAN);
@@ -44,7 +37,7 @@ public class SpacePlane {
         glEnd();
 
         // Speed arrow
-        Vector endPoint = new Vector(visualCenter.x + center.speed.x * 10, visualCenter.y + center.speed.y * 10);
+        Vector endPoint = new Vector(visualCenter.x + speed.x * 10, visualCenter.y + speed.y * 10);
         Vector sidePoint = new Vector(visualCenter.x + 4, visualCenter.y + 4);
 
         glColor3f(1, 0, 0); // TODO Hardcoded color

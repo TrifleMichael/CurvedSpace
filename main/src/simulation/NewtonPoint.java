@@ -3,15 +3,16 @@ package simulation;
 import utility.Settings;
 import utility.Vector;
 
-public class NewtonPoint {
-    public Vector position;
+import java.util.ArrayList;
+
+public class NewtonPoint extends Vector {
     public Vector speed = new Vector(0, 0);
     public double mass = 1;
 
     public boolean movable = true;
 
     public NewtonPoint(Vector position) {
-        this.position = position;
+        super(position);
     }
 
     public void applyGravity(NewtonPoint[] newtonPoints) {
@@ -25,13 +26,13 @@ public class NewtonPoint {
     }
 
     public void move() {
-        position.add(speed);
+        add(speed);
     }
 
     Vector getGravitationalContribution(NewtonPoint newtonPoint) {
-        double dist = position.getDistance(newtonPoint.position);
+        double dist = getDistance(newtonPoint);
         double gravityForceScalar = newtonPoint.mass * Settings.G / (dist * dist);
-        double angle = position.getAngle(newtonPoint.position);
+        double angle = getAngle(newtonPoint);
         return new Vector(
                 Math.cos(angle) * gravityForceScalar,
                 Math.sin(angle) * gravityForceScalar);

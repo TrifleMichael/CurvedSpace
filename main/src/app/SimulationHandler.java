@@ -39,6 +39,7 @@ public class SimulationHandler {
         return circleObjects.stream().map(co -> co.newtonPoint).toArray(NewtonPoint[]::new);
     }
 
+
     CircleSpriteHandler[] getCircleSprites() {
         return circleObjects.stream().map(co -> co.circleSpriteHandler).toArray(CircleSpriteHandler[]::new);
     }
@@ -73,10 +74,10 @@ public class SimulationHandler {
     public void gameSetup() {
         circleObjects.add(new CircleObject(300, 400, 30, coordinateTransposer));
         circleObjects.add(new CircleObject(500, 400, 30, coordinateTransposer));
-        circleObjects.get(0).setSpeed(new Vector(0, 0.5));
-        circleObjects.get(1).setSpeed(new Vector(0, -0.5));
+        circleObjects.get(0).newtonPoint.speed = new Vector(0, 0.5);
+        circleObjects.get(1).newtonPoint.speed = new Vector(0, -0.5);
 
-        spacePlane = new SpacePlane(new NewtonPoint(new Vector(100, 100)), coordinateTransposer);
+        spacePlane = new SpacePlane(new Vector(100, 100), coordinateTransposer);
 
         parametricPoints.add(new ParametricPoint(new Vector(400,400), 0.01, 300, 100, 60, coordinateTransposer));
     }
@@ -93,10 +94,10 @@ public class SimulationHandler {
 
         circleObjects.add(new CircleObject(700, 0, 15, coordinateTransposer));
         circleObjects.get(1).newtonPoint.mass = 1.5;
-        circleObjects.get(1).setSpeed(new Vector(0, 0.83));
+        circleObjects.get(1).newtonPoint.speed = new Vector(0, 0.83);
 
-        spacePlane = new SpacePlane(new NewtonPoint(new Vector(250, 0)), coordinateTransposer);
-        spacePlane.center.speed.y = 1;
+        spacePlane = new SpacePlane(new Vector(250, 0), coordinateTransposer);
+        spacePlane.speed.y = 1;
     }
 
     public void drawFrame() {
@@ -113,7 +114,7 @@ public class SimulationHandler {
     }
 
     public void simulatePhysics() {
-        coordinateTransposer.shipPosition = spacePlane.center.position;
+        coordinateTransposer.shipPosition = spacePlane;
 
         // Other points
         var newtonPoints = getNewtonPoints();
@@ -126,14 +127,14 @@ public class SimulationHandler {
         }
 
         // Spaceplane
-        spacePlane.center.applyGravity(newtonPoints);
-        Vector spacePlaneSpeedFromCursor = cursorPosition.getDifference(spacePlane.center.position);
+        spacePlane.applyGravity(newtonPoints);
+        Vector spacePlaneSpeedFromCursor = cursorPosition.getDifference(spacePlane);
         spacePlaneSpeedFromCursor.normalize();
         spacePlaneSpeedFromCursor.multiplyByConstant(0.03);
         if (leftButtonDown) {
-            spacePlane.center.speed.add(spacePlaneSpeedFromCursor);
+            spacePlane.speed.add(spacePlaneSpeedFromCursor);
         }
-        spacePlane.center.move();
+        spacePlane.move();
     }
 
     public void loop() {

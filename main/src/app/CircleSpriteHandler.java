@@ -27,7 +27,7 @@ public class CircleSpriteHandler {
     }
 
     public void drawCircle() {
-        Vector center = coordinateTransposer.physicalToVisual(circleObject.newtonPoint.position);
+        Vector center = coordinateTransposer.physicalToVisual(circleObject.newtonPoint);
 
         glColor3f((float)r, (float)g, (float)b); // TODO Hardcoded color
         glBegin(GL_TRIANGLE_FAN);
