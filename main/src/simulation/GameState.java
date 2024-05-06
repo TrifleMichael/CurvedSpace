@@ -61,7 +61,7 @@ public class GameState implements Cloneable {
         try {
             GameState clone = (GameState) super.clone();
             clone.backgroundStars = new ArrayList<>(this.backgroundStars);
-            clone.circleObjects = new ArrayList<>(this.circleObjects);
+            clone.circleObjects = new ArrayList<>(this.circleObjects); // TODO clone subparts
             clone.parametricPoints = new ArrayList<>(this.parametricPoints);
             return clone;
         } catch (CloneNotSupportedException e) {

@@ -5,7 +5,7 @@ import utility.Vector;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class SpacePlane extends NewtonPoint {
+public class SpacePlane extends NewtonPoint implements Cloneable {
 
 
     float r = 1;
@@ -47,5 +47,16 @@ public class SpacePlane extends NewtonPoint {
         glVertex2d(sidePoint.x, sidePoint.y);
         glEnd();
 
+    }
+
+    @Override
+    public SpacePlane clone() {
+        try {
+            SpacePlane clone = (SpacePlane) super.clone();
+
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

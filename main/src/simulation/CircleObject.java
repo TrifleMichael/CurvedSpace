@@ -5,7 +5,7 @@ import app.CoordinateTransposer;
 import simulation.NewtonPoint;
 import utility.Vector;
 
-public class CircleObject {
+public class CircleObject implements Cloneable{
     public CircleSpriteHandler circleSpriteHandler;
     public NewtonPoint newtonPoint;
 
