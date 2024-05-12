@@ -49,6 +49,15 @@ public class SimulationHandler {
 
     boolean leftButtonDown;
 
+    public void checkCollisions() {
+        for(CircleObject co : circleObjects) {
+            if (co.newtonPoint.getDistance(spacePlane) < co.getRadius() + spacePlane.radius) {
+                spacePlane.exploding = true;
+                System.out.println("Explosion scheduled"); // Todo: actually explode ship and reset game
+                break;
+            }
+        }
+    }
 
     public void callbackSetup() {
         glfwSetCursorPosCallback(window, (window, xpos, ypos) -> {
@@ -69,9 +78,9 @@ public class SimulationHandler {
                     }
                 }
                 if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+//                if (button == GLFW_KEY_SPACE) {
                     if (action == GLFW_PRESS) {
                         runningInReverse = !runningInReverse;
-                        System.out.println("Za warudo");
                     }
                 }
             }
@@ -123,6 +132,7 @@ public class SimulationHandler {
     public void simulatePhysics() {
         coordinateTransposer.shipPosition = spacePlane;
         var newtonPoints = getNewtonPoints();
+        checkCollisions();
 
         if (!runningInReverse) {
             for (var point : newtonPoints) {
