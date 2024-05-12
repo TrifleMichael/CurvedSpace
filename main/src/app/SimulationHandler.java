@@ -20,6 +20,7 @@ public class SimulationHandler {
     long window;
 
 
+    boolean runningInReverse = false;
 
     Vector cursorPosition = new Vector(0, 0);
 
@@ -48,6 +49,15 @@ public class SimulationHandler {
 
     boolean leftButtonDown;
 
+    public void checkCollisions() {
+        for(CircleObject co : circleObjects) {
+            if (co.newtonPoint.getDistance(spacePlane) < co.getRadius() + spacePlane.radius) {
+                spacePlane.exploding = true;
+                System.out.println("Explosion scheduled"); // Todo: actually explode ship and reset game
+                break;
+            }
+        }
+    }
 
     public void callbackSetup() {
         glfwSetCursorPosCallback(window, (window, xpos, ypos) -> {
@@ -65,6 +75,12 @@ public class SimulationHandler {
                     } else if (action == GLFW_RELEASE) {
                         leftButtonDown = false;
 //                        System.out.println("Left mouse button released");
+                    }
+                }
+                if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+//                if (button == GLFW_KEY_SPACE) {
+                    if (action == GLFW_PRESS) {
+                        runningInReverse = !runningInReverse;
                     }
                 }
             }
@@ -115,26 +131,46 @@ public class SimulationHandler {
 
     public void simulatePhysics() {
         coordinateTransposer.shipPosition = spacePlane;
-
-        // Other points
         var newtonPoints = getNewtonPoints();
-        for (var point : newtonPoints) {
-            point.move();
-            point.applyGravity(newtonPoints);
-        }
-        for (var point : parametricPoints) {
-            point.nextStep();
-        }
+        checkCollisions();
 
-        // Spaceplane
-        spacePlane.applyGravity(newtonPoints);
-        Vector spacePlaneSpeedFromCursor = cursorPosition.getDifference(spacePlane);
-        spacePlaneSpeedFromCursor.normalize();
-        spacePlaneSpeedFromCursor.multiplyByConstant(0.03);
-        if (leftButtonDown) {
-            spacePlane.speed.add(spacePlaneSpeedFromCursor);
+        if (!runningInReverse) {
+            for (var point : newtonPoints) {
+                point.move();
+                point.applyGravity(newtonPoints);
+            }
+            for (var point : parametricPoints) {
+                point.nextStep();
+            }
+
+            // Spaceplane
+            spacePlane.applyGravity(newtonPoints);
+            Vector spacePlaneSpeedFromCursor = cursorPosition.getDifference(spacePlane);
+            spacePlaneSpeedFromCursor.normalize();
+            spacePlaneSpeedFromCursor.multiplyByConstant(0.03);
+            if (leftButtonDown) {
+                spacePlane.speed.add(spacePlaneSpeedFromCursor);
+            }
+            spacePlane.move();
+        } else {
+            for (var point : newtonPoints) {
+                point.moveBackwards();
+                point.subtractGravity(newtonPoints);
+            }
+            for (var point : parametricPoints) {
+                point.previousStep();
+            }
+
+            // Spaceplane
+            spacePlane.subtractGravity(newtonPoints);
+//            Vector spacePlaneSpeedFromCursor = cursorPosition.getDifference(spacePlane);
+//            spacePlaneSpeedFromCursor.normalize();
+//            spacePlaneSpeedFromCursor.multiplyByConstant(0.03);
+//            if (leftButtonDown) {
+//                spacePlane.speed.add(spacePlaneSpeedFromCursor);
+//            }
+            spacePlane.moveBackwards();
         }
-        spacePlane.move();
     }
 
     public void loop() {

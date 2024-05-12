@@ -1,6 +1,7 @@
 package simulation;
 
 import app.CoordinateTransposer;
+import jdk.jshell.spi.ExecutionControl;
 import utility.Vector;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -41,6 +42,10 @@ public class ParametricPoint {
         this.center.add(centerOffsetVector);
         t += dt;
         t = t % (2*Math.PI);
+    }
+
+    public void previousStep() {
+        System.out.println("Maybe implement parametric previous step?");
     }
 
     public void draw() {

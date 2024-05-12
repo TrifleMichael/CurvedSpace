@@ -25,8 +25,22 @@ public class NewtonPoint extends Vector {
         }
     }
 
+    public void subtractGravity(NewtonPoint[] newtonPoints) {
+        if (movable) {
+            for (var point : newtonPoints) {
+                if (point != this) {
+                    this.speed.subtract(getGravitationalContribution(point));
+                }
+            }
+        }
+    }
+
     public void move() {
         add(speed);
+    }
+
+    public void moveBackwards() {
+        subtract(speed);
     }
 
     Vector getGravitationalContribution(NewtonPoint newtonPoint) {
