@@ -18,6 +18,10 @@ public class CircleObject implements Cloneable{
         newtonPoint.speed = speed;
     }
 
+    public double getRadius() {
+        return circleSpriteHandler.r;
+    }
+
     public void changeDrawPrecision(int drawPrecision) {
         circleSpriteHandler.drawPrecision = drawPrecision;
     }
