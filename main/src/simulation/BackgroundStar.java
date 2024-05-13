@@ -1,6 +1,7 @@
 package simulation;
 
 import app.CoordinateTransposer;
+import utility.CoordinateHasher;
 import utility.Vector;
 
 import java.util.ArrayList;
@@ -25,6 +26,26 @@ public class BackgroundStar {
             newStar.circleObject.circleSpriteHandler.b = 0.4 + Math.random() * 0.5;
             newStar.circleObject.changeDrawPrecision(10);
             stars.add(newStar);
+        }
+        return stars;
+    }
+
+    public static ArrayList<BackgroundStar> spawnStars2(Vector upperLeft, Vector lowerRight, int spawnChance, CoordinateTransposer coordinateTransposer) {
+        ArrayList<BackgroundStar> stars = new ArrayList<>();
+        for(int x = (int)upperLeft.x; x < lowerRight.x; x++) {
+            for(int y = (int)upperLeft.y; y < lowerRight.y; y++) {
+                long v = CoordinateHasher.hashIntegers(x, y);
+                if (v % spawnChance == 0) {
+//                    double r = 1 + Math.random() * 3;
+                    double r = 1 + CoordinateHasher.hashIntegers(x+1, y+1) % 4;
+                    BackgroundStar newStar = new BackgroundStar(new CircleObject(x, y, r, coordinateTransposer));
+                    newStar.circleObject.circleSpriteHandler.r = 0.4 + Math.random() * 0.5;
+                    newStar.circleObject.circleSpriteHandler.g = 0.4 + Math.random() * 0.1;
+                    newStar.circleObject.circleSpriteHandler.b = 0.4 + Math.random() * 0.5;
+                    newStar.circleObject.changeDrawPrecision(10);
+                    stars.add(newStar);
+                }
+            }
         }
         return stars;
     }

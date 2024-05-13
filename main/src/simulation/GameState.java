@@ -33,7 +33,7 @@ public class GameState implements Cloneable {
 
     public void gameState1() {
         resetGameState();
-        backgroundStars = BackgroundStar.spawnStars(3000, new Vector(-2000, -2000), new Vector(2000, 2000), coordinateTransposer);
+        backgroundStars = BackgroundStar.spawnStars2(new Vector(-2000, -2000), new Vector(2000, 2000), 3000, coordinateTransposer);
 
         circleObjects.add(new CircleObject(0, 0, 30, coordinateTransposer));
         circleObjects.get(0).newtonPoint.mass = 10;
@@ -59,7 +59,7 @@ public class GameState implements Cloneable {
 
     public void gameState2() {
         resetGameState();
-        backgroundStars = BackgroundStar.spawnStars(3000, new Vector(-2000, -2000), new Vector(2000, 2000), coordinateTransposer);
+        backgroundStars = BackgroundStar.spawnStars2(new Vector(-2000, -2000), new Vector(2000, 2000), 3000, coordinateTransposer);
         circleObjects = new ArrayList<>();
 
         spacePlane = new SpacePlane(new Vector(400, 100), coordinateTransposer);
@@ -82,7 +82,7 @@ public class GameState implements Cloneable {
         circleObjects.get(2).newtonPoint.movable = false;
 
         circleObjects.add(new CircleObject(400, 0, 10, coordinateTransposer));
-        circleObjects.get(3).newtonPoint.speed = new Vector(0, -2.3);
+        circleObjects.get(3).newtonPoint.speed = new Vector(0, -2.5);
         circleObjects.get(3).newtonPoint.mass = 0;
 
 
