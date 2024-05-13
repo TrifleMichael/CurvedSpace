@@ -42,14 +42,16 @@ public class SimulationHandler {
         return gameState.circleObjects.stream().map(co -> co.circleSpriteHandler).toArray(CircleSpriteHandler[]::new);
     }
 
-
     boolean leftButtonDown;
 
     public void checkCollisions() {
         for(CircleObject co : gameState.circleObjects) {
-            if (co.newtonPoint.getDistance(gameState.spacePlane) < co.getRadius() + gameState.spacePlane.radius) {
+            double distance = co.newtonPoint.getDistance(gameState.spacePlane);
+            double combinedRadius = co.getRadius() + gameState.spacePlane.radius;
+            if (distance < combinedRadius) {
                 if (co.target) {
                     System.out.println("You won!");
+                    gameState.nextRound();
                 } else {
                     gameState.spacePlane.exploding = true;
                     System.out.println("Explosion scheduled"); // Todo: actually explode ship
@@ -88,11 +90,6 @@ public class SimulationHandler {
         });
     }
 
-
-    public void singleStarGameSetup() {
-        gameState.gameState1();
-    }
-
     public void drawFrame() {
         for (var bs : gameState.backgroundStars) {
             bs.circleObject.circleSpriteHandler.drawCircle();
@@ -115,8 +112,10 @@ public class SimulationHandler {
 
         if (!runningInReverse) {
             for (var point : newtonPoints) {
-                point.move();
-                point.applyGravity(newtonPoints);
+                if (point.movable) {
+                    point.move();
+                    point.applyGravity(newtonPoints);
+                }
             }
             for (var point : gameState.parametricPoints) {
                 point.nextStep();
@@ -133,8 +132,10 @@ public class SimulationHandler {
             gameState.spacePlane.move();
         } else {
             for (var point : newtonPoints) {
-                point.moveBackwards();
-                point.subtractGravity(newtonPoints);
+                if (point.movable) {
+                    point.moveBackwards();
+                    point.subtractGravity(newtonPoints);
+                }
             }
             for (var point : gameState.parametricPoints) {
                 point.previousStep();
@@ -149,7 +150,7 @@ public class SimulationHandler {
     public void loop() {
         callbackSetup();
 //        gameSetup();
-        singleStarGameSetup();
+        gameState.nextRound();
 
 
         // This line is critical for LWJGL's interoperation with GLFW's

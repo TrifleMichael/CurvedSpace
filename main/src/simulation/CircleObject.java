@@ -11,6 +11,12 @@ public class CircleObject implements Cloneable{
 
     public boolean target = false;
 
+    public void setRGB(double r, double g, double b) {
+        circleSpriteHandler.r = r;
+        circleSpriteHandler.g = g;
+        circleSpriteHandler.b = b;
+    }
+
     public CircleObject(double x, double y, double r, CoordinateTransposer coordinateTransposer) {
         newtonPoint = new NewtonPoint(new Vector(x, y));
         circleSpriteHandler = new CircleSpriteHandler(this, r, coordinateTransposer);
@@ -21,7 +27,7 @@ public class CircleObject implements Cloneable{
     }
 
     public double getRadius() {
-        return circleSpriteHandler.r;
+        return circleSpriteHandler.radius;
     }
 
     public void changeDrawPrecision(int drawPrecision) {

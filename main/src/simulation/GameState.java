@@ -6,6 +6,8 @@ import utility.Vector;
 import java.util.ArrayList;
 
 public class GameState implements Cloneable {
+
+    int gameStateCounter = 0;
     public ArrayList<BackgroundStar> backgroundStars;
     public ArrayList<CircleObject> circleObjects;
     public SpacePlane spacePlane;
@@ -15,6 +17,18 @@ public class GameState implements Cloneable {
 
     public GameState(CoordinateTransposer coordinateTransposer) {
         this.coordinateTransposer = coordinateTransposer;
+    }
+
+    public void nextRound() {
+        resetGameState();
+        if (gameStateCounter == 0) {
+            gameState1();
+        } else if (gameStateCounter == 1){
+            gameState2();
+        } else {
+            gameState1();
+        }
+        gameStateCounter++;
     }
 
     public void gameState1() {
@@ -31,6 +45,9 @@ public class GameState implements Cloneable {
         circleObjects.get(1).newtonPoint.mass = 1.5;
         circleObjects.get(1).newtonPoint.speed = new Vector(0, 0.83);
         circleObjects.get(1).target = true;
+        circleObjects.get(1).circleSpriteHandler.r = 1;
+        circleObjects.get(1).circleSpriteHandler.g = 0;
+        circleObjects.get(1).circleSpriteHandler.b = 1;
 
         circleObjects.add(new CircleObject(740, 0, 5, coordinateTransposer));
         circleObjects.get(2).newtonPoint.mass = 0.01;
@@ -42,17 +59,37 @@ public class GameState implements Cloneable {
 
     public void gameState2() {
         resetGameState();
-        backgroundStars = new ArrayList<>();
+        backgroundStars = BackgroundStar.spawnStars(3000, new Vector(-2000, -2000), new Vector(2000, 2000), coordinateTransposer);
         circleObjects = new ArrayList<>();
-        parametricPoints = new ArrayList<>();
+
+        spacePlane = new SpacePlane(new Vector(400, 100), coordinateTransposer);
+        spacePlane.speed = new Vector(0, -1);
+
+        circleObjects.add(new CircleObject(-100, 0, 30, coordinateTransposer));
+        circleObjects.get(0).newtonPoint.speed = new Vector(0, 1.7);
+        circleObjects.get(0).newtonPoint.mass = 25;
+        circleObjects.get(0).setRGB(0.6, 0.6, 1);
+
+        circleObjects.add(new CircleObject(100, 0, 30, coordinateTransposer));
+        circleObjects.get(1).newtonPoint.speed = new Vector(0, -1.7);
+        circleObjects.get(1).newtonPoint.mass = 25;
+        circleObjects.get(1).setRGB(1, 0.3, 0.3);
+
+        circleObjects.add(new CircleObject(0, 0, 5, coordinateTransposer));
+        circleObjects.get(2).newtonPoint.speed = new Vector(0, 0);
+        circleObjects.get(2).newtonPoint.mass = 0;
+        circleObjects.get(2).target = true;
+        circleObjects.get(2).newtonPoint.movable = false;
+
+        circleObjects.add(new CircleObject(400, 0, 10, coordinateTransposer));
+        circleObjects.get(3).newtonPoint.speed = new Vector(0, -2.3);
+        circleObjects.get(3).newtonPoint.mass = 0;
 
 
-        spacePlane = new SpacePlane(new Vector(100, 100), coordinateTransposer);
-        circleObjects.add(new CircleObject(300, 400, 30, coordinateTransposer));
-        circleObjects.add(new CircleObject(500, 400, 30, coordinateTransposer));
-        circleObjects.get(0).newtonPoint.speed = new Vector(0, 0.5);
-        circleObjects.get(1).newtonPoint.speed = new Vector(0, -0.5);
-        parametricPoints.add(new ParametricPoint(new Vector(400,400), 0.01, 300, 100, 60, coordinateTransposer));
+
+//        circleObjects.add(new CircleObject(400, 0, 10, coordinateTransposer));
+//        circleObjects.get(2).newtonPoint.speed = new Vector(0, -0.3);
+//        circleObjects.get(1).newtonPoint.mass = 0.5;
     }
 
     public void resetGameState() {
