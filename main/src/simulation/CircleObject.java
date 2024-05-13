@@ -9,6 +9,8 @@ public class CircleObject implements Cloneable{
     public CircleSpriteHandler circleSpriteHandler;
     public NewtonPoint newtonPoint;
 
+    public boolean target = false;
+
     public CircleObject(double x, double y, double r, CoordinateTransposer coordinateTransposer) {
         newtonPoint = new NewtonPoint(new Vector(x, y));
         circleSpriteHandler = new CircleSpriteHandler(this, r, coordinateTransposer);

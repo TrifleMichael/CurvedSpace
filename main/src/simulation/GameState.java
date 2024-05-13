@@ -26,9 +26,15 @@ public class GameState implements Cloneable {
         circleObjects.get(0).circleSpriteHandler.r = 1;
         circleObjects.get(0).circleSpriteHandler.g = 1;
         circleObjects.get(0).circleSpriteHandler.b = 0;
+
         circleObjects.add(new CircleObject(700, 0, 15, coordinateTransposer));
         circleObjects.get(1).newtonPoint.mass = 1.5;
         circleObjects.get(1).newtonPoint.speed = new Vector(0, 0.83);
+        circleObjects.get(1).target = true;
+
+        circleObjects.add(new CircleObject(740, 0, 5, coordinateTransposer));
+        circleObjects.get(2).newtonPoint.mass = 0.01;
+        circleObjects.get(2).newtonPoint.speed = new Vector(0, 2.2);
 
         spacePlane = new SpacePlane(new Vector(250, 0), coordinateTransposer);
         spacePlane.speed.y = 1;

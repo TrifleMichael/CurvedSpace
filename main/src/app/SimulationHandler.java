@@ -48,8 +48,13 @@ public class SimulationHandler {
     public void checkCollisions() {
         for(CircleObject co : gameState.circleObjects) {
             if (co.newtonPoint.getDistance(gameState.spacePlane) < co.getRadius() + gameState.spacePlane.radius) {
-                gameState.spacePlane.exploding = true;
-                System.out.println("Explosion scheduled"); // Todo: actually explode ship and reset game
+                if (co.target) {
+                    System.out.println("You won!");
+                } else {
+                    gameState.spacePlane.exploding = true;
+                    System.out.println("Explosion scheduled"); // Todo: actually explode ship
+                    runningInReverse = true;
+                }
                 break;
             }
         }
