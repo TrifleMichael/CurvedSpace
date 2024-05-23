@@ -32,6 +32,8 @@ public class SimulationHandler {
 
     GameState gameState = new GameState(coordinateTransposer);
 
+    boolean inMainMenu = true;
+
 
     NewtonPoint[] getNewtonPoints() {
         return gameState.circleObjects.stream().map(co -> co.newtonPoint).toArray(NewtonPoint[]::new);
@@ -45,19 +47,21 @@ public class SimulationHandler {
     boolean leftButtonDown;
 
     public void checkCollisions() {
-        for(CircleObject co : gameState.circleObjects) {
-            double distance = co.newtonPoint.getDistance(gameState.spacePlane);
-            double combinedRadius = co.getRadius() + gameState.spacePlane.radius;
-            if (distance < combinedRadius) {
-                if (co.target) {
-                    System.out.println("You won!");
-                    gameState.nextRound();
-                } else {
-                    gameState.spacePlane.exploding = true;
-                    System.out.println("Explosion scheduled"); // Todo: actually explode ship
-                    runningInReverse = true;
+        if(!inMainMenu) {
+            for (CircleObject co : gameState.circleObjects) {
+                double distance = co.newtonPoint.getDistance(gameState.spacePlane);
+                double combinedRadius = co.getRadius() + gameState.spacePlane.radius;
+                if (distance < combinedRadius) {
+                    if (co.target) {
+                        System.out.println("You won!");
+                        gameState.nextRound();
+                    } else {
+                        gameState.spacePlane.exploding = true;
+                        System.out.println("Explosion scheduled"); // Todo: actually explode ship
+                        runningInReverse = true;
+                    }
+                    break;
                 }
-                break;
             }
         }
     }
@@ -71,6 +75,10 @@ public class SimulationHandler {
         glfwSetMouseButtonCallback(window, new GLFWMouseButtonCallback() {
             @Override
             public void invoke(long window, int button, int action, int mods) {
+                if (inMainMenu) {
+                    inMainMenu = false;
+                    gameState.nextRound();
+                }
                 if (button == GLFW_MOUSE_BUTTON_LEFT) {
                     if (action == GLFW_PRESS) {
                         leftButtonDown = true;
