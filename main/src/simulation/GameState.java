@@ -19,14 +19,17 @@ public class GameState implements Cloneable {
         this.coordinateTransposer = coordinateTransposer;
     }
 
+
     public void nextRound() {
         gameStateCounter++;
         resetGameState();
         if (gameStateCounter == 1) {
             mainMenu();
         } else if (gameStateCounter == 2){
+            gameState3();
+        } else if (gameStateCounter == 3) {
             gameState2();
-        } else {
+        } else if (gameStateCounter == 4) {
             gameState1();
         }
     }
@@ -42,37 +45,37 @@ public class GameState implements Cloneable {
         circleObjects.add(new CircleObject(-300, 0, 5, coordinateTransposer));
         circleObjects.get(0).setSpeed(new Vector(-0.1, 1.4));
         circleObjects.get(0).newtonPoint.mass = 0.3;
-        circleObjects.get(0).circleSpriteHandler.r = 0;
-        circleObjects.get(0).circleSpriteHandler.g = 1;
-        circleObjects.get(0).circleSpriteHandler.b = 1;
+        circleObjects.get(0).circleSpriteHandler.r = 0.6;
+        circleObjects.get(0).circleSpriteHandler.g = 0.6;
+        circleObjects.get(0).circleSpriteHandler.b = 0.6;
 
 
         circleObjects.add(new CircleObject(-330, 0, 9, coordinateTransposer));
         circleObjects.get(1).setSpeed(new Vector(-0.1, 2.3));
         circleObjects.get(1).newtonPoint.mass = 0.3;
-        circleObjects.get(1).circleSpriteHandler.r = 1;
-        circleObjects.get(1).circleSpriteHandler.g = 1;
-        circleObjects.get(1).circleSpriteHandler.b = 0;
+        circleObjects.get(1).circleSpriteHandler.r = 0;
+        circleObjects.get(1).circleSpriteHandler.g = 0.6;
+        circleObjects.get(1).circleSpriteHandler.b = 1;
 
 
         circleObjects.add(new CircleObject(300, 0, 11, coordinateTransposer));
         circleObjects.get(2).setSpeed(new Vector(-0.1, -1.4));
         circleObjects.get(2).newtonPoint.mass = 0.3;
-        circleObjects.get(2).circleSpriteHandler.r = 0.2;
-        circleObjects.get(2).circleSpriteHandler.g = 1;
+        circleObjects.get(2).circleSpriteHandler.r = 0.6;
+        circleObjects.get(2).circleSpriteHandler.g = 0.2;
         circleObjects.get(2).circleSpriteHandler.b = 0.2;
 
 
         circleObjects.add(new CircleObject(330, 0, 8, coordinateTransposer));
         circleObjects.get(3).setSpeed(new Vector(-0.1, -2.3));
         circleObjects.get(3).newtonPoint.mass = 0.3;
-        circleObjects.get(3).circleSpriteHandler.r = 0.2;
-        circleObjects.get(3).circleSpriteHandler.g = 0.2;
-        circleObjects.get(3).circleSpriteHandler.b = 1;
+        circleObjects.get(3).circleSpriteHandler.r = 0.6;
+        circleObjects.get(3).circleSpriteHandler.g = 0.6;
+        circleObjects.get(3).circleSpriteHandler.b = 0.6;
 
 
 
-        circleObjects.add(new CircleObject(-20, 0, 14, coordinateTransposer));
+        circleObjects.add(new CircleObject(-20, 0, 20, coordinateTransposer));
         circleObjects.get(4).setSpeed(new Vector(-0.1, -2.5));
         circleObjects.get(4).newtonPoint.mass = 10;
         circleObjects.get(4).circleSpriteHandler.r = 1;
@@ -80,12 +83,12 @@ public class GameState implements Cloneable {
         circleObjects.get(4).circleSpriteHandler.b = 0;
 
 
-        circleObjects.add(new CircleObject(20, 0, 20, coordinateTransposer));
+        circleObjects.add(new CircleObject(20, 0, 14, coordinateTransposer));
         circleObjects.get(5).setSpeed(new Vector(-0.1, 2.5));
         circleObjects.get(5).newtonPoint.mass = 10;
-        circleObjects.get(5).circleSpriteHandler.r = 1;
-        circleObjects.get(5).circleSpriteHandler.g = 0.6;
-        circleObjects.get(5).circleSpriteHandler.b = 0;
+        circleObjects.get(5).circleSpriteHandler.r = 0.7;
+        circleObjects.get(5).circleSpriteHandler.g = 0.9;
+        circleObjects.get(5).circleSpriteHandler.b = 1;
     }
 
     public void gameState1() {
@@ -141,12 +144,27 @@ public class GameState implements Cloneable {
         circleObjects.add(new CircleObject(400, 0, 10, coordinateTransposer));
         circleObjects.get(3).newtonPoint.speed = new Vector(0, -2.5);
         circleObjects.get(3).newtonPoint.mass = 0;
+    }
 
+    public void gameState3() {
+        resetGameState();
+        backgroundStars = BackgroundStar.spawnStars2(new Vector(-2000, -2000), new Vector(2000, 2000), 3000, coordinateTransposer);
+        circleObjects = new ArrayList<>();
 
+        spacePlane = new SpacePlane(new Vector(200, 0), coordinateTransposer);
+        spacePlane.speed = new Vector(0, 1.6);
 
-//        circleObjects.add(new CircleObject(400, 0, 10, coordinateTransposer));
-//        circleObjects.get(2).newtonPoint.speed = new Vector(0, -0.3);
-//        circleObjects.get(1).newtonPoint.mass = 0.5;
+        circleObjects.add(new CircleObject(0, 0, 30, coordinateTransposer));
+        circleObjects.get(0).newtonPoint.speed = new Vector(0, 0);
+        circleObjects.get(0).newtonPoint.mass = 20;
+        circleObjects.get(0).setRGB(1, 0.3, 0.3);
+
+        circleObjects.add(new CircleObject(-450, 0, 15, coordinateTransposer));
+        circleObjects.get(1).newtonPoint.speed = new Vector(0, -1.5);
+        circleObjects.get(1).newtonPoint.mass = 1;
+        circleObjects.get(1).setRGB(1, 1, 1);
+        circleObjects.get(1).target = true;
+
     }
 
     public void resetGameState() {
