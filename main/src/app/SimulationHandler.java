@@ -2,6 +2,8 @@ package app;
 
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.stb.STBImage;
+import org.lwjgl.system.MemoryStack;
 import simulation.*;
 import utility.Settings;
 import utility.Vector;
@@ -9,11 +11,14 @@ import utility.Vector;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 public class SimulationHandler {
 
@@ -168,6 +173,10 @@ public class SimulationHandler {
         // bindings available for use.
         GL.createCapabilities();
 
+        // Load the texture
+        int textureId = loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\test.png"); // TODO remove Hardcoding
+
+
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.1f, 0.0f);
 
@@ -186,6 +195,22 @@ public class SimulationHandler {
             glLoadIdentity();
 
             // https://stackoverflow.com/questions/20394727/gl-triangle-strip-vs-gl-triangle-fan
+            // Bind the texture
+            glBindTexture(GL_TEXTURE_2D, textureId);
+
+            // Render the textured quad
+            glEnable(GL_TEXTURE_2D);
+            glBegin(GL_QUADS);
+            glTexCoord2f(0, 0);
+            glVertex2f(100, 100);
+            glTexCoord2f(1, 0);
+            glVertex2f(300, 100);
+            glTexCoord2f(1, 1);
+            glVertex2f(300, 300);
+            glTexCoord2f(0, 1);
+            glVertex2f(100, 300);
+            glEnd();
+            glDisable(GL_TEXTURE_2D);
 
             simulatePhysics();
             drawFrame();
@@ -195,6 +220,53 @@ public class SimulationHandler {
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();
+            try {
+                Thread.sleep(10000);
+            } catch (Exception e) {
+                System.out.println("Hello");
+            }
         }
+
+        glDeleteTextures(textureId);
+    }
+
+    private int loadTexture(String path) {
+        int width, height;
+        ByteBuffer image;
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            IntBuffer w = stack.mallocInt(1);
+            IntBuffer h = stack.mallocInt(1);
+            IntBuffer comp = stack.mallocInt(1);
+
+            // Load the image
+            image = STBImage.stbi_load(path, w, h, comp, 4);
+            if (image == null) {
+                throw new RuntimeException("Failed to load image: " + STBImage.stbi_failure_reason());
+            }
+
+            width = w.get();
+            height = h.get();
+        }
+
+        // Create a new OpenGL texture
+        int textureId = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, textureId);
+
+        // Set the texture parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        // Upload the texture data
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+
+        // Generate mipmaps
+        glGenerateMipmap(GL_TEXTURE_2D); // TODO is this the good import?
+
+        // Free the image memory
+        STBImage.stbi_image_free(image);
+
+        return textureId;
     }
 }
