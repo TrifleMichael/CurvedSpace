@@ -205,7 +205,7 @@ public class SimulationHandler {
             simulatePhysics();
             drawFrame();
             if (inMainMenu) {
-                TextureDrawer.drawTexture(logoTexture, 0, Settings.windowX, Settings.windowY - 300, Settings.windowY);
+                TextureDrawer.drawTexture(logoTexture, 0, Settings.windowX , Settings.windowY - 500, Settings.windowY);
             }
 
             glfwSwapBuffers(window); // swap the color buffers

@@ -2,6 +2,7 @@ package simulation;
 
 import app.CircleSpriteHandler;
 import app.CoordinateTransposer;
+import app.TextureDrawer;
 import simulation.NewtonPoint;
 import utility.Vector;
 
@@ -10,6 +11,7 @@ public class CircleObject implements Cloneable{
     public NewtonPoint newtonPoint;
 
     public boolean target = false;
+
 
     public void setRGB(double r, double g, double b) {
         circleSpriteHandler.r = r;

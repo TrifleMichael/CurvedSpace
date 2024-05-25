@@ -1,6 +1,7 @@
 package app;
 
 import simulation.CircleObject;
+import simulation.NewtonPoint;
 import utility.*;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -16,6 +17,8 @@ public class CircleSpriteHandler {
 
     public int drawPrecision;
 
+    private int textureId;
+
     public CircleSpriteHandler(CircleObject circleObject, double radius, CoordinateTransposer coordinateTransposer) {
         this.circleObject = circleObject;
         this.radius = radius;
@@ -24,6 +27,7 @@ public class CircleSpriteHandler {
         b = 0;
         this.coordinateTransposer = coordinateTransposer;
         drawPrecision = 360;
+        textureId = TextureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\star1.png");
     }
 
     public void drawCircle() {
@@ -39,5 +43,8 @@ public class CircleSpriteHandler {
             glVertex2d(x, y);
         }
         glEnd();
+//        int radius = (int)circleObject.getRadius();
+//        NewtonPoint center = circleObject.newtonPoint;
+//        TextureDrawer.drawTexture(textureId, (int)center.x - radius, (int)center.x + radius, (int)center.y - radius, (int)center.y + radius);
     }
 }
