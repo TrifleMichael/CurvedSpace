@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
+import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -38,6 +39,8 @@ public class SimulationHandler {
     GameState gameState = new GameState(coordinateTransposer);
 
     boolean inMainMenu = true;
+
+    private int logoTexture;
 
 
     NewtonPoint[] getNewtonPoints() {
@@ -174,7 +177,7 @@ public class SimulationHandler {
         GL.createCapabilities();
 
         // Load the texture
-        int textureId = loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\test.png"); // TODO remove Hardcoding
+        loadTextures();
 
 
         // Set the clear color
@@ -188,7 +191,7 @@ public class SimulationHandler {
             // Set up the projection matrix
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0, Settings.windowX, 0, Settings.windowY, 1, -1); // Assuming your window size is 800x800
+            glOrtho(0, Settings.windowX, 0, Settings.windowY, 1, -1);
 
             // Set up the modelview matrix
             glMatrixMode(GL_MODELVIEW);
@@ -196,38 +199,44 @@ public class SimulationHandler {
 
             // https://stackoverflow.com/questions/20394727/gl-triangle-strip-vs-gl-triangle-fan
             // Bind the texture
-            glBindTexture(GL_TEXTURE_2D, textureId);
-
-            // Render the textured quad
-            glEnable(GL_TEXTURE_2D);
-            glBegin(GL_QUADS);
-            glTexCoord2f(0, 0);
-            glVertex2f(100, 100);
-            glTexCoord2f(1, 0);
-            glVertex2f(300, 100);
-            glTexCoord2f(1, 1);
-            glVertex2f(300, 300);
-            glTexCoord2f(0, 1);
-            glVertex2f(100, 300);
-            glEnd();
-            glDisable(GL_TEXTURE_2D);
 
             simulatePhysics();
             drawFrame();
+            if (inMainMenu) {
+                drawTexture(logoTexture, 0, Settings.windowX, Settings.windowY - 300, Settings.windowY);
+            }
 
             glfwSwapBuffers(window); // swap the color buffers
 
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();
-            try {
-                Thread.sleep(10000);
-            } catch (Exception e) {
-                System.out.println("Hello");
-            }
         }
 
-        glDeleteTextures(textureId);
+//        glDeleteTextures(textureId); // TODO Clearing textures
+    }
+
+    private void loadTextures() {
+        logoTexture = loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\logo.png");
+    }
+
+    private void drawTexture(int textureId, int xl, int xr, int yd, int yu) {
+        glBindTexture(GL_TEXTURE_2D, textureId);
+
+        // Render the textured quad
+        glEnable(GL_TEXTURE_2D);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0, 0);
+        glVertex2f(xl, yu);
+        glTexCoord2f(1, 0);
+        glVertex2f(xr, yu);
+        glTexCoord2f(1, 1);
+        glVertex2f(xr, yd);
+        glTexCoord2f(0, 1);
+        glVertex2f(xl, yd);
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
+
     }
 
     private int loadTexture(String path) {
