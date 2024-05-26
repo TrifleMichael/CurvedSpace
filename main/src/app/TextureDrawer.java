@@ -5,13 +5,20 @@ import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 public class TextureDrawer {
 
-    public static void drawTexture(int textureId, int xl, int xr, int yd, int yu) {
+    public HashMap<String, Integer> textureMap = new HashMap<>();
+
+    public ArrayList<DrawEntry> drawQueue = new ArrayList<>();
+
+    public void drawTexture(int textureId, int xl, int xr, int yd, int yu) {
         glBindTexture(GL_TEXTURE_2D, textureId);
 
         // Render the textured quad
@@ -29,7 +36,7 @@ public class TextureDrawer {
         glDisable(GL_TEXTURE_2D);
     }
 
-    public static int loadTexture(String path) {
+    public int loadTexture(String path) {
         int width, height;
         ByteBuffer image;
         try (MemoryStack stack = MemoryStack.stackPush()) {

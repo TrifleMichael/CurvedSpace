@@ -31,17 +31,19 @@ public class SimulationHandler {
 
     public SimulationHandler(long window) {
         this.window = window;
+        gameState = new GameState(coordinateTransposer, textureDrawer);
     }
 
     CoordinateTransposer coordinateTransposer = new CoordinateTransposer();
 
 
-    GameState gameState = new GameState(coordinateTransposer);
+    GameState gameState;
 
     boolean inMainMenu = true;
 
     private int logoTexture;
 
+    TextureDrawer textureDrawer = new TextureDrawer();
 
     NewtonPoint[] getNewtonPoints() {
         return gameState.circleObjects.stream().map(co -> co.newtonPoint).toArray(NewtonPoint[]::new);
@@ -205,7 +207,7 @@ public class SimulationHandler {
             simulatePhysics();
             drawFrame();
             if (inMainMenu) {
-                TextureDrawer.drawTexture(logoTexture, 0, Settings.windowX , Settings.windowY - 500, Settings.windowY);
+                textureDrawer.drawTexture(logoTexture, 0, Settings.windowX , Settings.windowY - 500, Settings.windowY);
             }
 
             glfwSwapBuffers(window); // swap the color buffers
@@ -219,7 +221,9 @@ public class SimulationHandler {
     }
 
     private void loadTextures() {
-        logoTexture = TextureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\logo.png");
+        logoTexture = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\logo.png");
+        int starTexture = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\star1.png");
+        textureDrawer.textureMap.put("star1", starTexture);
     }
 
 }

@@ -17,7 +17,6 @@ public class CircleSpriteHandler {
 
     public int drawPrecision;
 
-    private int textureId;
 
     public CircleSpriteHandler(CircleObject circleObject, double radius, CoordinateTransposer coordinateTransposer) {
         this.circleObject = circleObject;
@@ -27,7 +26,6 @@ public class CircleSpriteHandler {
         b = 0;
         this.coordinateTransposer = coordinateTransposer;
         drawPrecision = 360;
-        textureId = TextureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\star1.png");
     }
 
     public void drawCircle() {
