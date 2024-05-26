@@ -25,7 +25,7 @@ public class CircleObject implements Cloneable {
 
     public CircleObject(double x, double y, double r, CoordinateTransposer coordinateTransposer, TextureDrawer textureDrawer, String textureName) {
         newtonPoint = new NewtonPoint(new Vector(x, y));
-        circleSpriteHandler = new CircleSpriteHandler(this, r, coordinateTransposer, textureDrawer);
+        circleSpriteHandler = new CircleSpriteHandler(this, r, coordinateTransposer, textureDrawer, textureName);
         this.textureDrawer = textureDrawer;
         this.textureName = textureName;
     }

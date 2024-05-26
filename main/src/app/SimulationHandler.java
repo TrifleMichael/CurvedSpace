@@ -228,6 +228,8 @@ public class SimulationHandler {
         textureDrawer.textureMap.put("star1", starTexture);
         int starTexture2 = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\star2.png");
         textureDrawer.textureMap.put("star2", starTexture2);
+        int earth = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\earth.png");
+        textureDrawer.textureMap.put("earth", earth);
     }
 
 }

@@ -46,7 +46,7 @@ public class GameState implements Cloneable {
         spacePlane.frozen = true;
 
 
-        circleObjects.add(new CircleObject(-300, 0, 5, coordinateTransposer, textureDrawer, "star1"));
+        circleObjects.add(new CircleObject(-300, 0, 5, coordinateTransposer, textureDrawer, "earth"));
         circleObjects.get(0).setSpeed(new Vector(-0.1, 1.4));
         circleObjects.get(0).newtonPoint.mass = 0.3;
         circleObjects.get(0).circleSpriteHandler.r = 0.6;
@@ -87,7 +87,7 @@ public class GameState implements Cloneable {
         circleObjects.get(4).circleSpriteHandler.b = 0;
 
 
-        circleObjects.add(new CircleObject(20, 0, 14, coordinateTransposer, textureDrawer, "star1"));
+        circleObjects.add(new CircleObject(20, 0, 14, coordinateTransposer, textureDrawer, "star2"));
         circleObjects.get(5).setSpeed(new Vector(-0.1, 2.5));
         circleObjects.get(5).newtonPoint.mass = 10;
         circleObjects.get(5).circleSpriteHandler.r = 0.7;
@@ -163,7 +163,7 @@ public class GameState implements Cloneable {
         circleObjects.get(0).newtonPoint.mass = 20;
         circleObjects.get(0).setRGB(1, 0.3, 0.3);
 
-        circleObjects.add(new CircleObject(-450, 0, 15, coordinateTransposer, textureDrawer, "star1"));
+        circleObjects.add(new CircleObject(-450, 0, 15, coordinateTransposer, textureDrawer, "earth"));
         circleObjects.get(1).newtonPoint.speed = new Vector(0, -1.5);
         circleObjects.get(1).newtonPoint.mass = 1;
         circleObjects.get(1).setRGB(1, 1, 1);
