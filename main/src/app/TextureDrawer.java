@@ -18,6 +18,22 @@ public class TextureDrawer {
 
     public ArrayList<DrawEntry> drawQueue = new ArrayList<>();
 
+    public ArrayList<Integer> removeQueue = new ArrayList<>();
+
+    public void drawQueueContent() {
+        for(DrawEntry entry : drawQueue) {
+            int id = textureMap.get(entry.textureName);
+            drawTexture(id, entry.xl, entry.xr, entry.yd, entry.yu);
+            removeQueue.add(id);
+        }
+        drawQueue.clear();
+    }
+
+//    public void clearTextures() {
+//        for(Integer id : removeQueue) {
+//        glDeleteTextures(textureId);
+//    }
+
     public void drawTexture(int textureId, int xl, int xr, int yd, int yu) {
         glBindTexture(GL_TEXTURE_2D, textureId);
 

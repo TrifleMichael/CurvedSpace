@@ -113,11 +113,12 @@ public class SimulationHandler {
             bs.circleObject.circleSpriteHandler.drawCircle();
         }
         for (var sprite : getCircleSprites()) {
-            sprite.drawCircle();
+            sprite.createDrawQueueEntry();
         }
         for (var point : gameState.parametricPoints) {
             point.draw();
         }
+        textureDrawer.drawQueueContent();
         gameState.spacePlane.draw();
     }
 

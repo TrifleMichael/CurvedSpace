@@ -40,7 +40,7 @@ public class GameState implements Cloneable {
 
     public void mainMenu() {
         resetGameState();
-//        backgroundStars = BackgroundStar.spawnStars2(new Vector(-2000, -2000), new Vector(2000, 2000), 3000, coordinateTransposer);
+        backgroundStars = BackgroundStar.spawnStars2(new Vector(-2000, -2000), new Vector(2000, 2000), 3000, coordinateTransposer, textureDrawer);
         spacePlane = new SpacePlane(new Vector(0, 0), coordinateTransposer);
         spacePlane.visible = false;
         spacePlane.frozen = true;
@@ -52,47 +52,47 @@ public class GameState implements Cloneable {
         circleObjects.get(0).circleSpriteHandler.r = 0.6;
         circleObjects.get(0).circleSpriteHandler.g = 0.6;
         circleObjects.get(0).circleSpriteHandler.b = 0.6;
-//
-//
-//        circleObjects.add(new CircleObject(-330, 0, 9, coordinateTransposer));
-//        circleObjects.get(1).setSpeed(new Vector(-0.1, 2.3));
-//        circleObjects.get(1).newtonPoint.mass = 0.3;
-//        circleObjects.get(1).circleSpriteHandler.r = 0;
-//        circleObjects.get(1).circleSpriteHandler.g = 0.6;
-//        circleObjects.get(1).circleSpriteHandler.b = 1;
-//
-//
-//        circleObjects.add(new CircleObject(300, 0, 11, coordinateTransposer));
-//        circleObjects.get(2).setSpeed(new Vector(-0.1, -1.4));
-//        circleObjects.get(2).newtonPoint.mass = 0.3;
-//        circleObjects.get(2).circleSpriteHandler.r = 0.6;
-//        circleObjects.get(2).circleSpriteHandler.g = 0.2;
-//        circleObjects.get(2).circleSpriteHandler.b = 0.2;
-//
-//
-//        circleObjects.add(new CircleObject(330, 0, 8, coordinateTransposer));
-//        circleObjects.get(3).setSpeed(new Vector(-0.1, -2.3));
-//        circleObjects.get(3).newtonPoint.mass = 0.3;
-//        circleObjects.get(3).circleSpriteHandler.r = 0.6;
-//        circleObjects.get(3).circleSpriteHandler.g = 0.6;
-//        circleObjects.get(3).circleSpriteHandler.b = 0.6;
-//
-//
-//
-//        circleObjects.add(new CircleObject(-20, 0, 20, coordinateTransposer));
-//        circleObjects.get(4).setSpeed(new Vector(-0.1, -2.5));
-//        circleObjects.get(4).newtonPoint.mass = 10;
-//        circleObjects.get(4).circleSpriteHandler.r = 1;
-//        circleObjects.get(4).circleSpriteHandler.g = 0;
-//        circleObjects.get(4).circleSpriteHandler.b = 0;
-//
-//
-//        circleObjects.add(new CircleObject(20, 0, 14, coordinateTransposer));
-//        circleObjects.get(5).setSpeed(new Vector(-0.1, 2.5));
-//        circleObjects.get(5).newtonPoint.mass = 10;
-//        circleObjects.get(5).circleSpriteHandler.r = 0.7;
-//        circleObjects.get(5).circleSpriteHandler.g = 0.9;
-//        circleObjects.get(5).circleSpriteHandler.b = 1;
+
+
+        circleObjects.add(new CircleObject(-330, 0, 9, coordinateTransposer, textureDrawer));
+        circleObjects.get(1).setSpeed(new Vector(-0.1, 2.3));
+        circleObjects.get(1).newtonPoint.mass = 0.3;
+        circleObjects.get(1).circleSpriteHandler.r = 0;
+        circleObjects.get(1).circleSpriteHandler.g = 0.6;
+        circleObjects.get(1).circleSpriteHandler.b = 1;
+
+
+        circleObjects.add(new CircleObject(300, 0, 11, coordinateTransposer, textureDrawer));
+        circleObjects.get(2).setSpeed(new Vector(-0.1, -1.4));
+        circleObjects.get(2).newtonPoint.mass = 0.3;
+        circleObjects.get(2).circleSpriteHandler.r = 0.6;
+        circleObjects.get(2).circleSpriteHandler.g = 0.2;
+        circleObjects.get(2).circleSpriteHandler.b = 0.2;
+
+
+        circleObjects.add(new CircleObject(330, 0, 8, coordinateTransposer, textureDrawer));
+        circleObjects.get(3).setSpeed(new Vector(-0.1, -2.3));
+        circleObjects.get(3).newtonPoint.mass = 0.3;
+        circleObjects.get(3).circleSpriteHandler.r = 0.6;
+        circleObjects.get(3).circleSpriteHandler.g = 0.6;
+        circleObjects.get(3).circleSpriteHandler.b = 0.6;
+
+
+
+        circleObjects.add(new CircleObject(-20, 0, 20, coordinateTransposer, textureDrawer));
+        circleObjects.get(4).setSpeed(new Vector(-0.1, -2.5));
+        circleObjects.get(4).newtonPoint.mass = 10;
+        circleObjects.get(4).circleSpriteHandler.r = 1;
+        circleObjects.get(4).circleSpriteHandler.g = 0;
+        circleObjects.get(4).circleSpriteHandler.b = 0;
+
+
+        circleObjects.add(new CircleObject(20, 0, 14, coordinateTransposer, textureDrawer));
+        circleObjects.get(5).setSpeed(new Vector(-0.1, 2.5));
+        circleObjects.get(5).newtonPoint.mass = 10;
+        circleObjects.get(5).circleSpriteHandler.r = 0.7;
+        circleObjects.get(5).circleSpriteHandler.g = 0.9;
+        circleObjects.get(5).circleSpriteHandler.b = 1;
     }
 
     public void gameState1() {
