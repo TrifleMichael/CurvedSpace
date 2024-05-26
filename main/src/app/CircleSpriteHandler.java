@@ -1,6 +1,7 @@
 package app;
 
 import simulation.CircleObject;
+import simulation.NewtonPoint;
 import utility.*;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -16,7 +17,11 @@ public class CircleSpriteHandler {
 
     public int drawPrecision;
 
-    public CircleSpriteHandler(CircleObject circleObject, double radius, CoordinateTransposer coordinateTransposer) {
+    TextureDrawer textureDrawer;
+
+    String textureName;
+
+    public CircleSpriteHandler(CircleObject circleObject, double radius, CoordinateTransposer coordinateTransposer, TextureDrawer textureDrawer, String textureName) {
         this.circleObject = circleObject;
         this.radius = radius;
         r = 0;
@@ -24,6 +29,8 @@ public class CircleSpriteHandler {
         b = 0;
         this.coordinateTransposer = coordinateTransposer;
         drawPrecision = 360;
+        this.textureDrawer = textureDrawer;
+        this.textureName = textureName;
     }
 
     public void drawCircle() {
@@ -39,5 +46,18 @@ public class CircleSpriteHandler {
             glVertex2d(x, y);
         }
         glEnd();
+    }
+
+    public void createDrawQueueEntry() {
+        int radius = (int)circleObject.getRadius();
+        NewtonPoint center = circleObject.newtonPoint;
+        Vector topLeft = coordinateTransposer.physicalToVisual(new Vector(center.x - radius, center.y + radius));
+        Vector bottomRight = coordinateTransposer.physicalToVisual(new Vector(center.x + radius, center.y - radius));
+
+        textureDrawer.drawQueue.add(new DrawEntry(textureName,
+                (int)topLeft.x,
+                (int)bottomRight.x,
+                (int)bottomRight.y,
+                (int)topLeft.y));
     }
 }

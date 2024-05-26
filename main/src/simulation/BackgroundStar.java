@@ -1,6 +1,7 @@
 package simulation;
 
 import app.CoordinateTransposer;
+import app.TextureDrawer;
 import utility.CoordinateHasher;
 import utility.Vector;
 
@@ -14,13 +15,13 @@ public class BackgroundStar {
         this.circleObject.newtonPoint.movable = false;
     }
 
-    public static ArrayList<BackgroundStar> spawnStars(int num, Vector upperLeft, Vector lowerRight, CoordinateTransposer coordinateTransposer) {
+    public static ArrayList<BackgroundStar> spawnStars(int num, Vector upperLeft, Vector lowerRight, CoordinateTransposer coordinateTransposer, TextureDrawer textureDrawer) {
         ArrayList<BackgroundStar> stars = new ArrayList<>();
         while(num-- != 0) {
             double x = upperLeft.x + (lowerRight.x - upperLeft.x) * Math.random();
             double y = lowerRight.y + (upperLeft.y - lowerRight.y) * Math.random();
             double r = 1 + Math.random() * 3;
-            BackgroundStar newStar = new BackgroundStar(new CircleObject(x, y, r, coordinateTransposer));
+            BackgroundStar newStar = new BackgroundStar(new CircleObject(x, y, r, coordinateTransposer, textureDrawer, "None"));
             newStar.circleObject.circleSpriteHandler.r = 0.4 + Math.random() * 0.5;
             newStar.circleObject.circleSpriteHandler.g = 0.4 + Math.random() * 0.1;
             newStar.circleObject.circleSpriteHandler.b = 0.4 + Math.random() * 0.5;
@@ -30,7 +31,7 @@ public class BackgroundStar {
         return stars;
     }
 
-    public static ArrayList<BackgroundStar> spawnStars2(Vector upperLeft, Vector lowerRight, int spawnChance, CoordinateTransposer coordinateTransposer) {
+    public static ArrayList<BackgroundStar> spawnStars2(Vector upperLeft, Vector lowerRight, int spawnChance, CoordinateTransposer coordinateTransposer, TextureDrawer textureDrawer) {
         ArrayList<BackgroundStar> stars = new ArrayList<>();
         for(int x = (int)upperLeft.x; x < lowerRight.x; x++) {
             for(int y = (int)upperLeft.y; y < lowerRight.y; y++) {
@@ -38,7 +39,7 @@ public class BackgroundStar {
                 if (v % spawnChance == 0) {
 //                    double r = 1 + Math.random() * 3;
                     double r = 1 + CoordinateHasher.hashIntegers(x+1, y+1) % 4;
-                    BackgroundStar newStar = new BackgroundStar(new CircleObject(x, y, r, coordinateTransposer));
+                    BackgroundStar newStar = new BackgroundStar(new CircleObject(x, y, r, coordinateTransposer, textureDrawer, "None"));
                     newStar.circleObject.circleSpriteHandler.r = 0.4 + Math.random() * 0.5;
                     newStar.circleObject.circleSpriteHandler.g = 0.4 + Math.random() * 0.1;
                     newStar.circleObject.circleSpriteHandler.b = 0.4 + Math.random() * 0.5;

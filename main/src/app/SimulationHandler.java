@@ -2,6 +2,8 @@ package app;
 
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.stb.STBImage;
+import org.lwjgl.system.MemoryStack;
 import simulation.*;
 import utility.Settings;
 import utility.Vector;
@@ -9,11 +11,15 @@ import utility.Vector;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
+import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 public class SimulationHandler {
 
@@ -25,15 +31,19 @@ public class SimulationHandler {
 
     public SimulationHandler(long window) {
         this.window = window;
+        gameState = new GameState(coordinateTransposer, textureDrawer);
     }
 
     CoordinateTransposer coordinateTransposer = new CoordinateTransposer();
 
 
-    GameState gameState = new GameState(coordinateTransposer);
+    GameState gameState;
 
     boolean inMainMenu = true;
 
+    private int logoTexture;
+
+    TextureDrawer textureDrawer = new TextureDrawer();
 
     NewtonPoint[] getNewtonPoints() {
         return gameState.circleObjects.stream().map(co -> co.newtonPoint).toArray(NewtonPoint[]::new);
@@ -77,6 +87,7 @@ public class SimulationHandler {
             public void invoke(long window, int button, int action, int mods) {
                 if (inMainMenu) {
                     inMainMenu = false;
+                    glDeleteTextures(logoTexture);
                     gameState.nextRound();
                 }
                 if (button == GLFW_MOUSE_BUTTON_LEFT) {
@@ -103,11 +114,12 @@ public class SimulationHandler {
             bs.circleObject.circleSpriteHandler.drawCircle();
         }
         for (var sprite : getCircleSprites()) {
-            sprite.drawCircle();
+            sprite.createDrawQueueEntry();
         }
         for (var point : gameState.parametricPoints) {
             point.draw();
         }
+        textureDrawer.drawQueueContent();
         gameState.spacePlane.draw();
     }
 
@@ -168,8 +180,14 @@ public class SimulationHandler {
         // bindings available for use.
         GL.createCapabilities();
 
+        // Load the texture
+        loadTextures();
+
+
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.1f, 0.0f);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
@@ -179,16 +197,20 @@ public class SimulationHandler {
             // Set up the projection matrix
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            glOrtho(0, Settings.windowX, 0, Settings.windowY, 1, -1); // Assuming your window size is 800x800
+            glOrtho(0, Settings.windowX, 0, Settings.windowY, 1, -1);
 
             // Set up the modelview matrix
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
 
             // https://stackoverflow.com/questions/20394727/gl-triangle-strip-vs-gl-triangle-fan
+            // Bind the texture
 
             simulatePhysics();
             drawFrame();
+            if (inMainMenu) {
+                textureDrawer.drawTexture(logoTexture, 0, Settings.windowX , Settings.windowY - 500, Settings.windowY);
+            }
 
             glfwSwapBuffers(window); // swap the color buffers
 
@@ -196,5 +218,18 @@ public class SimulationHandler {
             // invoked during this call.
             glfwPollEvents();
         }
+
+//        glDeleteTextures(textureId); // TODO Clearing textures
     }
+
+    private void loadTextures() {
+        logoTexture = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\logo.png");
+        int starTexture = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\star1.png");
+        textureDrawer.textureMap.put("star1", starTexture);
+        int starTexture2 = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\star2.png");
+        textureDrawer.textureMap.put("star2", starTexture2);
+        int earth = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\earth.png");
+        textureDrawer.textureMap.put("earth", earth);
+    }
+
 }
