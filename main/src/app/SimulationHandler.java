@@ -87,6 +87,7 @@ public class SimulationHandler {
             public void invoke(long window, int button, int action, int mods) {
                 if (inMainMenu) {
                     inMainMenu = false;
+                    glDeleteTextures(logoTexture);
                     gameState.nextRound();
                 }
                 if (button == GLFW_MOUSE_BUTTON_LEFT) {
@@ -225,6 +226,8 @@ public class SimulationHandler {
         logoTexture = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\logo.png");
         int starTexture = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\star1.png");
         textureDrawer.textureMap.put("star1", starTexture);
+        int starTexture2 = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\star2.png");
+        textureDrawer.textureMap.put("star2", starTexture2);
     }
 
 }

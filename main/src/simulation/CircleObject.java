@@ -14,6 +14,8 @@ public class CircleObject implements Cloneable {
 
     TextureDrawer textureDrawer;
 
+    String textureName;
+
 
     public void setRGB(double r, double g, double b) {
         circleSpriteHandler.r = r;
@@ -21,10 +23,11 @@ public class CircleObject implements Cloneable {
         circleSpriteHandler.b = b;
     }
 
-    public CircleObject(double x, double y, double r, CoordinateTransposer coordinateTransposer, TextureDrawer textureDrawer) {
+    public CircleObject(double x, double y, double r, CoordinateTransposer coordinateTransposer, TextureDrawer textureDrawer, String textureName) {
         newtonPoint = new NewtonPoint(new Vector(x, y));
         circleSpriteHandler = new CircleSpriteHandler(this, r, coordinateTransposer, textureDrawer);
         this.textureDrawer = textureDrawer;
+        this.textureName = textureName;
     }
 
     public void setSpeed(Vector speed) {

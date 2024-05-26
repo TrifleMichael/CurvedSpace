@@ -21,7 +21,7 @@ public class BackgroundStar {
             double x = upperLeft.x + (lowerRight.x - upperLeft.x) * Math.random();
             double y = lowerRight.y + (upperLeft.y - lowerRight.y) * Math.random();
             double r = 1 + Math.random() * 3;
-            BackgroundStar newStar = new BackgroundStar(new CircleObject(x, y, r, coordinateTransposer, textureDrawer));
+            BackgroundStar newStar = new BackgroundStar(new CircleObject(x, y, r, coordinateTransposer, textureDrawer, "None"));
             newStar.circleObject.circleSpriteHandler.r = 0.4 + Math.random() * 0.5;
             newStar.circleObject.circleSpriteHandler.g = 0.4 + Math.random() * 0.1;
             newStar.circleObject.circleSpriteHandler.b = 0.4 + Math.random() * 0.5;
@@ -39,7 +39,7 @@ public class BackgroundStar {
                 if (v % spawnChance == 0) {
 //                    double r = 1 + Math.random() * 3;
                     double r = 1 + CoordinateHasher.hashIntegers(x+1, y+1) % 4;
-                    BackgroundStar newStar = new BackgroundStar(new CircleObject(x, y, r, coordinateTransposer, textureDrawer));
+                    BackgroundStar newStar = new BackgroundStar(new CircleObject(x, y, r, coordinateTransposer, textureDrawer, "None"));
                     newStar.circleObject.circleSpriteHandler.r = 0.4 + Math.random() * 0.5;
                     newStar.circleObject.circleSpriteHandler.g = 0.4 + Math.random() * 0.1;
                     newStar.circleObject.circleSpriteHandler.b = 0.4 + Math.random() * 0.5;
