@@ -6,7 +6,7 @@ import app.TextureDrawer;
 import simulation.NewtonPoint;
 import utility.Vector;
 
-public class CircleObject implements Cloneable {
+public class CircleObject {
     public CircleSpriteHandler circleSpriteHandler;
     public NewtonPoint newtonPoint;
 
