@@ -147,7 +147,9 @@ public class SimulationHandler {
             spacePlaneSpeedFromCursor.normalize();
             spacePlaneSpeedFromCursor.multiplyByConstant(0.03);
             if (leftButtonDown) {
-                gameState.spacePlane.speed.add(spacePlaneSpeedFromCursor);
+                gameState.spacePlane.accelerate(spacePlaneSpeedFromCursor);
+            } else {
+                gameState.spacePlane.accelerate(new Vector(0, 0));
             }
             gameState.spacePlane.move();
         } else {
