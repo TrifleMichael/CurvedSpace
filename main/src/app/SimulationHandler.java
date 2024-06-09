@@ -119,6 +119,7 @@ public class SimulationHandler {
         for (var point : gameState.parametricPoints) {
             point.draw();
         }
+        glColor3f(1, 1, 1);
         textureDrawer.drawQueueContent();
         gameState.spacePlane.draw();
     }
