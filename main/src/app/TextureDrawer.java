@@ -52,6 +52,11 @@ public class TextureDrawer {
         glDisable(GL_TEXTURE_2D);
     }
 
+    public void drawTexture(String textureTag, int xl, int xr, int yd, int yu) {
+        int textureId = textureMap.get(textureTag);
+        drawTexture(textureId, xl, xr, yd, yu);
+    }
+
     public int loadTexture(String path) {
         int width, height;
         ByteBuffer image;

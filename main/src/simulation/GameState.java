@@ -105,7 +105,7 @@ public class GameState implements Cloneable {
         circleObjects.get(0).circleSpriteHandler.g = 1;
         circleObjects.get(0).circleSpriteHandler.b = 0;
 
-        circleObjects.add(new CircleObject(700, 0, 15, coordinateTransposer, textureDrawer, "star1"));
+        circleObjects.add(new CircleObject(700, 0, 15, coordinateTransposer, textureDrawer, "goal"));
         circleObjects.get(1).newtonPoint.mass = 1.5;
         circleObjects.get(1).newtonPoint.speed = new Vector(0, 0.83);
         circleObjects.get(1).target = true;
@@ -139,7 +139,7 @@ public class GameState implements Cloneable {
         circleObjects.get(1).newtonPoint.mass = 25;
         circleObjects.get(1).setRGB(1, 0.3, 0.3);
 
-        circleObjects.add(new CircleObject(0, 0, 5, coordinateTransposer, textureDrawer, "star1"));
+        circleObjects.add(new CircleObject(0, 0, 15, coordinateTransposer, textureDrawer, "goal"));
         circleObjects.get(2).newtonPoint.speed = new Vector(0, 0);
         circleObjects.get(2).newtonPoint.mass = 0;
         circleObjects.get(2).target = true;
@@ -163,7 +163,7 @@ public class GameState implements Cloneable {
         circleObjects.get(0).newtonPoint.mass = 20;
         circleObjects.get(0).setRGB(1, 0.3, 0.3);
 
-        circleObjects.add(new CircleObject(-450, 0, 15, coordinateTransposer, textureDrawer, "earth"));
+        circleObjects.add(new CircleObject(-450, 0, 15, coordinateTransposer, textureDrawer, "goal"));
         circleObjects.get(1).newtonPoint.speed = new Vector(0, -1.5);
         circleObjects.get(1).newtonPoint.mass = 1;
         circleObjects.get(1).setRGB(1, 1, 1);

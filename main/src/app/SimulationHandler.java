@@ -211,6 +211,9 @@ public class SimulationHandler {
             if (inMainMenu) {
                 textureDrawer.drawTexture(logoTexture, 0, Settings.windowX , Settings.windowY - 500, Settings.windowY);
             }
+            if (runningInReverse) {
+                textureDrawer.drawTexture("timeArrow", 0, Settings.windowX / 10, 0, Settings.windowY / 20);
+            }
 
             glfwSwapBuffers(window); // swap the color buffers
 
@@ -224,12 +227,16 @@ public class SimulationHandler {
 
     private void loadTextures() {
         logoTexture = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\logo.png");
-        int starTexture = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\star1.png");
-        textureDrawer.textureMap.put("star1", starTexture);
-        int starTexture2 = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\star2.png");
-        textureDrawer.textureMap.put("star2", starTexture2);
-        int earth = textureDrawer.loadTexture("E:\\Repos\\CurvedSpace\\main\\src\\textures\\earth.png");
-        textureDrawer.textureMap.put("earth", earth);
+        loadTexture("star1", "E:\\Repos\\CurvedSpace\\main\\src\\textures\\star1.png");
+        loadTexture("star2", "E:\\Repos\\CurvedSpace\\main\\src\\textures\\star2.png");
+        loadTexture("earth", "E:\\Repos\\CurvedSpace\\main\\src\\textures\\earth.png");
+        loadTexture("timeArrow", "E:\\Repos\\CurvedSpace\\main\\src\\textures\\tripleArrows.png");
+        loadTexture("goal", "E:\\Repos\\CurvedSpace\\main\\src\\textures\\goal.png");
+    }
+
+    private void loadTexture(String tag, String path) {
+        int textureId = textureDrawer.loadTexture(path);
+        textureDrawer.textureMap.put(tag, textureId);
     }
 
 }
